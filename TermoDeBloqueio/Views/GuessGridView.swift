@@ -17,6 +17,7 @@ struct GuessGridView: View {
                     letters: getLetters(for: index),
                     currentGuess: index == viewModel.guesses.count ? viewModel.currentGuess : ""
                 )
+                .id("\(index)-\(viewModel.currentGuess)")
             }
         }
         .padding()
@@ -38,23 +39,30 @@ struct GuessRowView: View {
     var body: some View {
         HStack(spacing: 8) {
             ForEach(0..<5, id: \.self) { index in
-                if !letters.isEmpty {
-                    // Letra já submetida
-                    LetterBoxView(
-                        letter: letters[index].character,
-                        status: letters[index].status
-                    )
-                } else if index < currentGuess.count {
-                    // Letra sendo digitada
-                    LetterBoxView(
-                        letter: String(currentGuess[currentGuess.index(currentGuess.startIndex, offsetBy: index)]),
-                        status: .none
-                    )
-                } else {
-                    // Caixa vazia
-                    LetterBoxView(letter: "", status: .none)
-                }
+                LetterBoxView(
+                    letter: getLetter(at: index),
+                    status: getStatus(at: index)
+                )
             }
+        }
+    }
+    
+    private func getLetter(at index: Int) -> String {
+        if !letters.isEmpty {
+            return letters[index].character
+        } else if index < currentGuess.count {
+            let stringIndex = currentGuess.index(currentGuess.startIndex, offsetBy: index)
+            return String(currentGuess[stringIndex])
+        } else {
+            return ""
+        }
+    }
+    
+    private func getStatus(at index: Int) -> LetterStatus {
+        if !letters.isEmpty {
+            return letters[index].status
+        } else {
+            return .none
         }
     }
 }

@@ -64,6 +64,7 @@ class GameViewModel: ObservableObject {
         
         currentGuess += letter.lowercased()
         errorMessage = ""
+        print("📝 Letra adicionada: \(letter), currentGuess agora: '\(currentGuess)'")
     }
     
     func deleteLetter() {

@@ -20,9 +20,11 @@ struct LetterBoxView: View {
                         .stroke(borderColor, lineWidth: 2)
                 )
             
-            Text(letter.uppercased())
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(textColor)
+            if !letter.isEmpty {
+                Text(letter.uppercased())
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(textColor)
+            }
         }
         .aspectRatio(1, contentMode: .fit)
     }
