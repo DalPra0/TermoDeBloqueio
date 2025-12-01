@@ -1,18 +1,11 @@
-//
-//  GameViewModel.swift
-//  TermoDeBloqueio
-//
-//  Created by Lucas Dal Pra Brascher on 01/12/25.
-//
-
 import SwiftUI
 import Combine
 
 enum LetterStatus {
-    case none      // Cinza - letra não existe
-    case wrong     // Cinza - letra não existe
-    case misplaced // Amarelo - letra existe mas posição errada
-    case correct   // Verde - letra correta na posição certa
+    case none
+    case wrong
+    case misplaced
+    case correct
 }
 
 struct Letter: Identifiable {
@@ -55,7 +48,7 @@ class GameViewModel: ObservableObject {
         errorMessage = ""
         keyboardStatus = [:]
         
-        print("🎯 Palavra do dia: \(targetWord)")
+        print("Palavra do dia: \(targetWord)")
     }
     
     func addLetter(_ letter: String) {
@@ -81,21 +74,17 @@ class GameViewModel: ObservableObject {
             return
         }
         
-        // Valida se a palavra existe
         guard WordData.shared.isValidWord(currentGuess) else {
             errorMessage = "Palavra não encontrada"
             return
         }
         
-        // Cria o guess com status de cada letra
         let letters = evaluateGuess(currentGuess)
         let guess = Guess(letters: letters)
         guesses.append(guess)
         
-        // Atualiza status do teclado
         updateKeyboardStatus(letters)
         
-        // Verifica se ganhou
         if currentGuess == targetWord {
             gameState = .won
         } else if guesses.count >= maxAttempts {
@@ -111,23 +100,21 @@ class GameViewModel: ObservableObject {
         var targetChars = Array(targetWord)
         var guessChars = Array(guess)
         
-        // Primeira passada: marca letras corretas (verdes)
         for i in 0..<wordLength {
             if guessChars[i] == targetChars[i] {
                 letters.append(Letter(character: String(guessChars[i]), status: .correct))
-                targetChars[i] = "_" // Marca como usada
-                guessChars[i] = "*" // Marca como processada
+                targetChars[i] = "_"
+                guessChars[i] = "*"
             } else {
                 letters.append(Letter(character: String(guessChars[i]), status: .none))
             }
         }
         
-        // Segunda passada: marca letras existentes mas mal posicionadas (amarelas)
         for i in 0..<wordLength {
-            if guessChars[i] != "*" { // Se não foi processada ainda
+            if guessChars[i] != "*" {
                 if let index = targetChars.firstIndex(of: guessChars[i]) {
                     letters[i].status = .misplaced
-                    targetChars[index] = "_" // Marca como usada
+                    targetChars[index] = "_"
                 } else {
                     letters[i].status = .wrong
                 }
@@ -141,7 +128,6 @@ class GameViewModel: ObservableObject {
         for letter in letters {
             let key = letter.character.uppercased()
             
-            // Prioridade: correct > misplaced > wrong
             if letter.status == .correct {
                 keyboardStatus[key] = .correct
             } else if letter.status == .misplaced && keyboardStatus[key] != .correct {

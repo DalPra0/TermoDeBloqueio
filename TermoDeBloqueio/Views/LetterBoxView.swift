@@ -1,10 +1,3 @@
-//
-//  LetterBoxView.swift
-//  TermoDeBloqueio
-//
-//  Created by Lucas Dal Pra Brascher on 01/12/25.
-//
-
 import SwiftUI
 
 struct LetterBoxView: View {
@@ -34,11 +27,11 @@ struct LetterBoxView: View {
         case .none:
             return Color.white
         case .wrong:
-            return Color(red: 0.47, green: 0.47, blue: 0.47) // Cinza
+            return Color(red: 0.47, green: 0.47, blue: 0.47)
         case .misplaced:
-            return Color(red: 0.79, green: 0.67, blue: 0.18) // Amarelo
+            return Color(red: 0.79, green: 0.67, blue: 0.18)
         case .correct:
-            return Color(red: 0.42, green: 0.68, blue: 0.39) // Verde
+            return Color(red: 0.42, green: 0.68, blue: 0.39)
         }
     }
     
@@ -54,7 +47,7 @@ struct LetterBoxView: View {
     private var textColor: Color {
         switch status {
         case .none:
-            return .black  // FORÇA PRETO para letras sendo digitadas
+            return .black
         default:
             return .white
         }

@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  TermoDeBloqueio
-//
-//  Created by Lucas Dal Pra Brascher on 01/12/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -12,15 +5,12 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header
             headerView
             
             Spacer()
             
-            // Grid de tentativas
             GuessGridView(viewModel: viewModel)
             
-            // Mensagem de erro
             if !viewModel.errorMessage.isEmpty {
                 Text(viewModel.errorMessage)
                     .font(.subheadline)
@@ -30,12 +20,10 @@ struct ContentView: View {
             
             Spacer()
             
-            // Mensagem de vitória/derrota
             if viewModel.gameState != .playing {
                 gameOverView
             }
             
-            // Teclado
             KeyboardView(viewModel: viewModel)
         }
         .background(Color.white)
@@ -55,13 +43,13 @@ struct ContentView: View {
     private var gameOverView: some View {
         VStack(spacing: 12) {
             if viewModel.gameState == .won {
-                Text("🎉 Parabéns!")
+                Text("Parabéns!")
                     .font(.title)
                     .bold()
                 Text("Você acertou!")
                     .font(.title3)
             } else {
-                Text("😔 Que pena!")
+                Text("Que pena!")
                     .font(.title)
                     .bold()
                 Text("A palavra era: \(WordData.shared.getDailyWord().uppercased())")
