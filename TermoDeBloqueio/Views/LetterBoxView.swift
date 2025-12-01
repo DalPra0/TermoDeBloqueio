@@ -26,13 +26,13 @@ struct LetterBoxView: View {
                     .foregroundColor(textColor)
             }
         }
-        .aspectRatio(1, contentMode: .fit)
+        .frame(width: 62, height: 62)
     }
     
     private var backgroundColor: Color {
         switch status {
         case .none:
-            return Color.clear
+            return Color.white
         case .wrong:
             return Color(red: 0.47, green: 0.47, blue: 0.47) // Cinza
         case .misplaced:
@@ -45,7 +45,7 @@ struct LetterBoxView: View {
     private var borderColor: Color {
         switch status {
         case .none:
-            return letter.isEmpty ? Color.gray.opacity(0.3) : Color.gray
+            return letter.isEmpty ? Color.gray.opacity(0.3) : Color.gray.opacity(0.7)
         default:
             return Color.clear
         }
@@ -54,7 +54,7 @@ struct LetterBoxView: View {
     private var textColor: Color {
         switch status {
         case .none:
-            return .primary
+            return .black  // FORÇA PRETO para letras sendo digitadas
         default:
             return .white
         }
