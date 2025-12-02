@@ -4,29 +4,31 @@ struct ContentView: View {
     @StateObject private var viewModel = GameViewModel()
     
     var body: some View {
-        VStack(spacing: 0) {
-            headerView
-            
-            Spacer()
-            
-            GuessGridView(viewModel: viewModel)
-            
-            if !viewModel.errorMessage.isEmpty {
-                Text(viewModel.errorMessage)
-                    .font(.subheadline)
-                    .foregroundColor(.red)
-                    .padding(.vertical, 8)
+        ZStack {
+            VStack(spacing: 0) {
+                headerView
+                
+                Spacer()
+                
+                GuessGridView(viewModel: viewModel)
+                
+                if !viewModel.errorMessage.isEmpty {
+                    Text(viewModel.errorMessage)
+                        .font(.subheadline)
+                        .foregroundColor(.red)
+                        .padding(.vertical, 8)
+                }
+                
+                Spacer()
+                
+                KeyboardView(viewModel: viewModel)
             }
-            
-            Spacer()
+            .background(Color.white)
             
             if viewModel.gameState != .playing {
                 gameOverView
             }
-            
-            KeyboardView(viewModel: viewModel)
         }
-        .background(Color.white)
     }
     
     private var headerView: some View {
