@@ -9,8 +9,8 @@ struct QuartetoView: View {
                 headerView
                 
                 ScrollView {
-                    VStack(spacing: 12) {
-                        HStack(spacing: 12) {
+                    VStack(spacing: 4) {
+                        HStack(spacing: 4) {
                             SingleGameGridView(
                                 gameState: viewModel.game1,
                                 currentGuess: viewModel.currentGuess,
@@ -24,7 +24,7 @@ struct QuartetoView: View {
                             )
                         }
                         
-                        HStack(spacing: 12) {
+                        HStack(spacing: 4) {
                             SingleGameGridView(
                                 gameState: viewModel.game3,
                                 currentGuess: viewModel.currentGuess,
@@ -38,7 +38,8 @@ struct QuartetoView: View {
                             )
                         }
                     }
-                    .padding()
+                    .padding(.horizontal, 4)
+                    .padding(.top, 8)
                 }
                 
                 if !viewModel.errorMessage.isEmpty {

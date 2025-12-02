@@ -9,7 +9,7 @@ struct DuetoView: View {
                 headerView
                 
                 ScrollView {
-                    HStack(spacing: 12) {
+                    HStack(spacing: 8) {
                         SingleGameGridView(
                             gameState: viewModel.game1,
                             currentGuess: viewModel.currentGuess,
@@ -22,7 +22,7 @@ struct DuetoView: View {
                             maxAttempts: viewModel.maxAttempts
                         )
                     }
-                    .padding()
+                    .padding(.horizontal, 8)
                 }
                 
                 if !viewModel.errorMessage.isEmpty {
@@ -105,7 +105,7 @@ struct SingleGameGridView: View {
     let maxAttempts: Int
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 2) {
             ForEach(0..<maxAttempts, id: \.self) { index in
                 SingleGuessRowView(
                     letters: getLetters(for: index),
@@ -129,13 +129,12 @@ struct SingleGuessRowView: View {
     let currentGuess: String
     
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 2) {
             ForEach(0..<5, id: \.self) { index in
-                LetterBoxView(
+                SmallLetterBoxView(
                     letter: getLetter(at: index),
                     status: getStatus(at: index)
                 )
-                .frame(width: 40, height: 40)
             }
         }
     }
@@ -156,6 +155,60 @@ struct SingleGuessRowView: View {
             return letters[index].status
         } else {
             return .none
+        }
+    }
+}
+
+struct SmallLetterBoxView: View {
+    let letter: String
+    let status: LetterStatus
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 2)
+                .fill(backgroundColor)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 2)
+                        .stroke(borderColor, lineWidth: 1.5)
+                )
+            
+            if !letter.isEmpty {
+                Text(letter.uppercased())
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(textColor)
+            }
+        }
+        .frame(width: 34, height: 34)
+    }
+    
+    private var backgroundColor: Color {
+        switch status {
+        case .none:
+            return Color.white
+        case .wrong:
+            return Color(red: 0.47, green: 0.47, blue: 0.47)
+        case .misplaced:
+            return Color(red: 0.79, green: 0.67, blue: 0.18)
+        case .correct:
+            return Color(red: 0.42, green: 0.68, blue: 0.39)
+        }
+    }
+    
+    private var borderColor: Color {
+        switch status {
+        case .none:
+            return letter.isEmpty ? Color.gray.opacity(0.3) : Color.gray.opacity(0.7)
+        default:
+            return Color.clear
+        }
+    }
+    
+    private var textColor: Color {
+        switch status {
+        case .none:
+            return .black
+        default:
+            return .white
         }
     }
 }
