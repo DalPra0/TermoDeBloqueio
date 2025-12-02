@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct KeyboardView: View {
-    @ObservedObject var viewModel: GameViewModel
+    let currentGuess: String
+    let keyboardStatus: [String: LetterStatus]
+    let onLetterTap: (String) -> Void
+    let onDeleteTap: () -> Void
+    let onEnterTap: () -> Void
     
     let rows = [
         ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -16,7 +20,7 @@ struct KeyboardView: View {
                     ForEach(row, id: \.self) { key in
                         KeyButton(
                             key: key,
-                            status: viewModel.keyboardStatus[key] ?? .none,
+                            status: keyboardStatus[key] ?? .none,
                             action: {
                                 handleKeyPress(key)
                             }
@@ -32,12 +36,22 @@ struct KeyboardView: View {
     private func handleKeyPress(_ key: String) {
         switch key {
         case "ENTER":
-            viewModel.submitGuess()
+            onEnterTap()
         case "⌫":
-            viewModel.deleteLetter()
+            onDeleteTap()
         default:
-            viewModel.addLetter(key)
+            onLetterTap(key)
         }
+    }
+}
+
+extension KeyboardView {
+    init(viewModel: GameViewModel) {
+        self.currentGuess = viewModel.currentGuess
+        self.keyboardStatus = viewModel.keyboardStatus
+        self.onLetterTap = { viewModel.addLetter($0) }
+        self.onDeleteTap = { viewModel.deleteLetter() }
+        self.onEnterTap = { viewModel.submitGuess() }
     }
 }
 

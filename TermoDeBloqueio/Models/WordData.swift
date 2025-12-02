@@ -119,6 +119,74 @@ class WordData {
     func isValidWord(_ word: String) -> Bool {
         return allWords.contains(word.lowercased())
     }
+    
+    func getDuetoWords() -> (String, String) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let referenceDate = calendar.date(from: DateComponents(year: 2024, month: 1, day: 1))!
+        let daysSinceReference = calendar.dateComponents([.day], from: referenceDate, to: today).day ?? 0
+        
+        var word1 = ""
+        var word2 = ""
+        var randomGenerator = SeededRandomGenerator(seed: UInt64(daysSinceReference * 2))
+        
+        for _ in 0..<100 {
+            let index = Int(randomGenerator.next() % UInt64(allWords.count))
+            let candidate = allWords[index]
+            
+            if word1.isEmpty {
+                if isWordSuitableForPlay(candidate, previousWord: "") {
+                    word1 = candidate
+                }
+            } else if !areTooSimilar(candidate, word1) && isWordSuitableForPlay(candidate, previousWord: "") {
+                word2 = candidate
+                break
+            }
+        }
+        
+        if word2.isEmpty {
+            word2 = allWords[Int.random(in: 0..<allWords.count)]
+        }
+        
+        return (word1, word2)
+    }
+    
+    func getQuartetoWords() -> (String, String, String, String) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let referenceDate = calendar.date(from: DateComponents(year: 2024, month: 1, day: 1))!
+        let daysSinceReference = calendar.dateComponents([.day], from: referenceDate, to: today).day ?? 0
+        
+        var words: [String] = []
+        var randomGenerator = SeededRandomGenerator(seed: UInt64(daysSinceReference * 4))
+        
+        var attempts = 0
+        while words.count < 4 && attempts < 200 {
+            let index = Int(randomGenerator.next() % UInt64(allWords.count))
+            let candidate = allWords[index]
+            
+            var isValid = isWordSuitableForPlay(candidate, previousWord: "")
+            
+            for existingWord in words {
+                if areTooSimilar(candidate, existingWord) {
+                    isValid = false
+                    break
+                }
+            }
+            
+            if isValid {
+                words.append(candidate)
+            }
+            
+            attempts += 1
+        }
+        
+        while words.count < 4 {
+            words.append(allWords[Int.random(in: 0..<allWords.count)])
+        }
+        
+        return (words[0], words[1], words[2], words[3])
+    }
 }
 
 struct SeededRandomGenerator {
