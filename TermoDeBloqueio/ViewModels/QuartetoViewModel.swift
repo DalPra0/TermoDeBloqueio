@@ -14,12 +14,6 @@ class QuartetoViewModel: ObservableObject {
     let maxAttempts = 9
     let wordLength = 5
     
-    enum OverallGameState {
-        case playing
-        case won
-        case lost
-    }
-    
     init() {
         let words = WordData.shared.getQuartetoWords()
         game1 = SingleGameState(targetWord: words.0, maxAttempts: 9)

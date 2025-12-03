@@ -2,10 +2,14 @@ import SwiftUI
 
 struct DuetoView: View {
     @StateObject private var viewModel = DuetoViewModel()
+    @State private var headerScale: CGFloat = 0.8
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                Color(red: 0.97, green: 0.97, blue: 0.97)
+                    .ignoresSafeArea()
+                
                 VStack(spacing: 0) {
                     headerView
                     
@@ -43,7 +47,6 @@ struct DuetoView: View {
                         onEnterTap: { viewModel.submitGuess() }
                     )
                 }
-                .background(Color.white)
                 
                 if viewModel.overallGameState != .playing {
                     gameOverView
@@ -55,51 +58,94 @@ struct DuetoView: View {
     private var headerView: some View {
         VStack(spacing: 4) {
             Text("DUETO")
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(.primary)
+                .font(.system(size: 36, weight: .black))
+                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                .scaleEffect(headerScale)
             
             Divider()
+                .background(Color.gray.opacity(0.3))
         }
         .padding(.top)
+        .onAppear {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                headerScale = 1.0
+            }
+        }
     }
     
     private var gameOverView: some View {
-        VStack(spacing: 12) {
-            if viewModel.overallGameState == .won {
-                Text("Parabéns!")
-                    .font(.title)
-                    .bold()
-                Text("Você acertou as 2 palavras!")
-                    .font(.title3)
-            } else {
-                Text("Que pena!")
-                    .font(.title)
-                    .bold()
-                Text("As palavras eram: \(viewModel.game1.targetWord.uppercased()) e \(viewModel.game2.targetWord.uppercased())")
-                    .font(.title3)
-                    .multilineTextAlignment(.center)
-            }
+        ZStack {
+            Color.black.opacity(0.4)
+                .ignoresSafeArea()
+                .transition(.opacity)
             
-            Button(action: {
-                viewModel.startNewGame()
-            }) {
-                Text("Jogar Novamente")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(Color.blue)
-                    .cornerRadius(8)
+            VStack(spacing: 16) {
+                if viewModel.overallGameState == .won {
+                    Text("✓")
+                        .font(.system(size: 60, weight: .bold))
+                        .foregroundColor(Color(red: 0.85, green: 0.73, blue: 0.20))
+                    
+                    Text("Parabéns!")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                    
+                    Text("Você acertou as 2 palavras!")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
+                } else {
+                    Text("×")
+                        .font(.system(size: 60, weight: .bold))
+                        .foregroundColor(Color(red: 0.85, green: 0.35, blue: 0.35))
+                    
+                    Text("Que pena!")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                    
+                    Text("As palavras eram:")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
+                    
+                    HStack(spacing: 12) {
+                        Text(viewModel.game1.targetWord.uppercased())
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                        
+                        Text("·")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color(red: 0.70, green: 0.70, blue: 0.70))
+                        
+                        Text(viewModel.game2.targetWord.uppercased())
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                    }
+                }
+                
+                Button(action: {
+                    withAnimation {
+                        viewModel.startNewGame()
+                    }
+                }) {
+                    Text("Jogar Novamente")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(red: 0.85, green: 0.73, blue: 0.20))
+                        )
+                }
+                .padding(.top, 8)
             }
-            .padding(.top, 8)
+            .padding(32)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.white)
+                    .shadow(color: Color.black.opacity(0.2), radius: 20, y: 10)
+            )
+            .padding(.horizontal, 32)
+            .transition(.scale.combined(with: .opacity))
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(UIColor.systemBackground))
-                .shadow(radius: 10)
-        )
-        .padding()
     }
 }
 

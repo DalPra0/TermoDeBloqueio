@@ -60,16 +60,31 @@ struct KeyButton: View {
     let status: LetterStatus
     let action: () -> Void
     
+    @State private var isPressed = false
+    
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.1)) {
+                isPressed = true
+            }
+            action()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.easeInOut(duration: 0.1)) {
+                    isPressed = false
+                }
+            }
+        }) {
             Text(key)
-                .font(.system(size: isSpecialKey ? 14 : 20, weight: .semibold))
+                .font(.system(size: isSpecialKey ? 13 : 19, weight: .semibold))
                 .foregroundColor(textColor)
                 .frame(maxWidth: isSpecialKey ? 60 : .infinity)
                 .frame(height: 58)
                 .background(backgroundColor)
-                .cornerRadius(4)
+                .cornerRadius(6)
+                .shadow(color: backgroundColor.opacity(0.3), radius: isPressed ? 1 : 3, y: isPressed ? 0 : 2)
         }
+        .scaleEffect(isPressed ? 0.95 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: isPressed)
     }
     
     private var isSpecialKey: Bool {
@@ -79,13 +94,13 @@ struct KeyButton: View {
     private var backgroundColor: Color {
         switch status {
         case .none:
-            return Color(red: 0.82, green: 0.82, blue: 0.82)
+            return Color(red: 0.85, green: 0.85, blue: 0.85)
         case .wrong:
-            return Color(red: 0.47, green: 0.47, blue: 0.47)
+            return Color(red: 0.45, green: 0.45, blue: 0.45)
         case .misplaced:
-            return Color(red: 0.79, green: 0.67, blue: 0.18)
+            return Color(red: 0.85, green: 0.73, blue: 0.20)
         case .correct:
-            return Color(red: 0.42, green: 0.68, blue: 0.39)
+            return Color(red: 0.40, green: 0.71, blue: 0.38)
         }
     }
     

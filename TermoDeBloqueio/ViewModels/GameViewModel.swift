@@ -1,24 +1,6 @@
 import SwiftUI
 import Combine
 
-enum LetterStatus {
-    case none
-    case wrong
-    case misplaced
-    case correct
-}
-
-struct Letter: Identifiable {
-    let id = UUID()
-    var character: String
-    var status: LetterStatus
-}
-
-struct Guess: Identifiable {
-    let id = UUID()
-    var letters: [Letter]
-}
-
 class GameViewModel: ObservableObject {
     @Published var guesses: [Guess] = []
     @Published var currentGuess: String = ""
@@ -29,12 +11,6 @@ class GameViewModel: ObservableObject {
     let maxAttempts = 6
     let wordLength = 5
     private var targetWord: String = ""
-    
-    enum GameState {
-        case playing
-        case won
-        case lost
-    }
     
     init() {
         startNewGame()
