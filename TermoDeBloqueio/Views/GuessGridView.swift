@@ -4,7 +4,7 @@ struct GuessGridView: View {
     @ObservedObject var viewModel: GameViewModel
     
     var body: some View {
-        VStack(spacing: 5) {
+        VStack(spacing: 8) {
             ForEach(0..<viewModel.maxAttempts, id: \.self) { index in
                 GuessRowView(
                     letters: getLetters(for: index),
@@ -30,7 +30,7 @@ struct GuessRowView: View {
     let currentGuess: String
     
     var body: some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 8) {
             ForEach(0..<5, id: \.self) { index in
                 LetterBoxView(
                     letter: getLetter(at: index),
