@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 struct KeyboardView: View {
     let currentGuess: String

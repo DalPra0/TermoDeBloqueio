@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 struct LetterBoxView: View {
     let letter: String
