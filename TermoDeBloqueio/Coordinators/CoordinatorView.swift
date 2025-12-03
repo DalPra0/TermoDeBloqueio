@@ -19,6 +19,12 @@ struct CoordinatorView: View {
                 case .quarteto:
                     QuartetoView()
                         .environmentObject(coordinator)
+                case .settings:
+                    SettingsView()
+                        .environmentObject(coordinator)
+                case .lockScreen:
+                    LockScreenView()
+                        .environmentObject(coordinator)
                 }
             }
             .navigationBarHidden(true)

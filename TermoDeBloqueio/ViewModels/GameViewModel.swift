@@ -8,6 +8,8 @@ class GameViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var keyboardStatus: [String: LetterStatus] = [:]
     
+    private let blockManager = BlockManager.shared
+    
     let maxAttempts = 6
     let wordLength = 5
     private var targetWord: String = ""
@@ -63,6 +65,7 @@ class GameViewModel: ObservableObject {
         
         if currentGuess == targetWord {
             gameState = .won
+            blockManager.markGameCompleted(.termo)
         } else if guesses.count >= maxAttempts {
             gameState = .lost
         }

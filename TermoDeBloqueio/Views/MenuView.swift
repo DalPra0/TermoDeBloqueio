@@ -11,6 +11,20 @@ struct MenuView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 40) {
+                HStack {
+                    Spacer()
+                    
+                    Button(action: { coordinator.showSettings() }) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 22, weight: .semibold))
+                            .foregroundColor(Color(red: 0.45, green: 0.45, blue: 0.45))
+                            .frame(width: 44, height: 44)
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+                .opacity(showContent ? 1.0 : 0.0)
+                
                 VStack(spacing: 8) {
                     Text("TERMO")
                         .font(.system(size: 48, weight: .black))
@@ -23,7 +37,7 @@ struct MenuView: View {
                         .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
                         .opacity(showContent ? 1.0 : 0.0)
                 }
-                .padding(.top, 60)
+                .padding(.top, 20)
                 
                 Spacer()
                 

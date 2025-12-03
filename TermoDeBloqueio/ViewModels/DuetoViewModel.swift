@@ -9,6 +9,8 @@ class DuetoViewModel: ObservableObject {
     @Published var keyboardStatus: [String: LetterStatus] = [:]
     @Published var overallGameState: OverallGameState = .playing
     
+    private let blockManager = BlockManager.shared
+    
     let maxAttempts = 7
     let wordLength = 5
     
@@ -95,6 +97,7 @@ class DuetoViewModel: ObservableObject {
         
         if won1 && won2 {
             overallGameState = .won
+            blockManager.markGameCompleted(.dueto)
         } else if maxAttemptsReached {
             overallGameState = .lost
         }

@@ -11,6 +11,8 @@ class QuartetoViewModel: ObservableObject {
     @Published var keyboardStatus: [String: LetterStatus] = [:]
     @Published var overallGameState: OverallGameState = .playing
     
+    private let blockManager = BlockManager.shared
+    
     let maxAttempts = 9
     let wordLength = 5
     
@@ -102,6 +104,7 @@ class QuartetoViewModel: ObservableObject {
         
         if allWon {
             overallGameState = .won
+            blockManager.markGameCompleted(.quarteto)
         } else if maxAttemptsReached {
             overallGameState = .lost
         }
