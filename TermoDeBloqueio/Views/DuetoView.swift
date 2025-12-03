@@ -4,46 +4,50 @@ struct DuetoView: View {
     @StateObject private var viewModel = DuetoViewModel()
     
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                headerView
-                
-                ScrollView {
-                    HStack(spacing: 8) {
-                        SingleGameGridView(
-                            gameState: viewModel.game1,
-                            currentGuess: viewModel.currentGuess,
-                            maxAttempts: viewModel.maxAttempts
-                        )
-                        
-                        SingleGameGridView(
-                            gameState: viewModel.game2,
-                            currentGuess: viewModel.currentGuess,
-                            maxAttempts: viewModel.maxAttempts
-                        )
+        GeometryReader { geometry in
+            ZStack {
+                VStack(spacing: 0) {
+                    headerView
+                    
+                    ScrollView {
+                        HStack(spacing: 12) {
+                            SingleGameGridView(
+                                gameState: viewModel.game1,
+                                currentGuess: viewModel.currentGuess,
+                                maxAttempts: viewModel.maxAttempts,
+                                availableWidth: (geometry.size.width - 12 - 16) / 2
+                            )
+                            
+                            SingleGameGridView(
+                                gameState: viewModel.game2,
+                                currentGuess: viewModel.currentGuess,
+                                maxAttempts: viewModel.maxAttempts,
+                                availableWidth: (geometry.size.width - 12 - 16) / 2
+                            )
+                        }
+                        .padding(.horizontal, 8)
                     }
-                    .padding(.horizontal, 8)
+                    
+                    if !viewModel.errorMessage.isEmpty {
+                        Text(viewModel.errorMessage)
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                            .padding(.vertical, 8)
+                    }
+                    
+                    KeyboardView(
+                        currentGuess: viewModel.currentGuess,
+                        keyboardStatus: viewModel.keyboardStatus,
+                        onLetterTap: { viewModel.addLetter($0) },
+                        onDeleteTap: { viewModel.deleteLetter() },
+                        onEnterTap: { viewModel.submitGuess() }
+                    )
                 }
+                .background(Color.white)
                 
-                if !viewModel.errorMessage.isEmpty {
-                    Text(viewModel.errorMessage)
-                        .font(.subheadline)
-                        .foregroundColor(.red)
-                        .padding(.vertical, 8)
+                if viewModel.overallGameState != .playing {
+                    gameOverView
                 }
-                
-                KeyboardView(
-                    currentGuess: viewModel.currentGuess,
-                    keyboardStatus: viewModel.keyboardStatus,
-                    onLetterTap: { viewModel.addLetter($0) },
-                    onDeleteTap: { viewModel.deleteLetter() },
-                    onEnterTap: { viewModel.submitGuess() }
-                )
-            }
-            .background(Color.white)
-            
-            if viewModel.overallGameState != .playing {
-                gameOverView
             }
         }
     }
@@ -103,13 +107,21 @@ struct SingleGameGridView: View {
     @ObservedObject var gameState: SingleGameState
     let currentGuess: String
     let maxAttempts: Int
+    let availableWidth: CGFloat
+    
+    private var boxSize: CGFloat {
+        let totalSpacing: CGFloat = 4 * 4
+        let available = availableWidth - totalSpacing
+        return min(available / 5, 40)
+    }
     
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 4) {
             ForEach(0..<maxAttempts, id: \.self) { index in
                 SingleGuessRowView(
                     letters: getLetters(for: index),
-                    currentGuess: index == gameState.guesses.count ? currentGuess : ""
+                    currentGuess: index == gameState.guesses.count ? currentGuess : "",
+                    boxSize: boxSize
                 )
             }
         }
@@ -127,13 +139,15 @@ struct SingleGameGridView: View {
 struct SingleGuessRowView: View {
     let letters: [Letter]
     let currentGuess: String
+    let boxSize: CGFloat
     
     var body: some View {
-        HStack(spacing: 2) {
+        HStack(spacing: 4) {
             ForEach(0..<5, id: \.self) { index in
                 SmallLetterBoxView(
                     letter: getLetter(at: index),
-                    status: getStatus(at: index)
+                    status: getStatus(at: index),
+                    size: boxSize
                 )
             }
         }
@@ -162,6 +176,11 @@ struct SingleGuessRowView: View {
 struct SmallLetterBoxView: View {
     let letter: String
     let status: LetterStatus
+    var size: CGFloat = 34
+    
+    private var fontSize: CGFloat {
+        size * 0.53
+    }
     
     var body: some View {
         ZStack {
@@ -174,11 +193,11 @@ struct SmallLetterBoxView: View {
             
             if !letter.isEmpty {
                 Text(letter.uppercased())
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: fontSize, weight: .bold))
                     .foregroundColor(textColor)
             }
         }
-        .frame(width: 34, height: 34)
+        .frame(width: size, height: size)
     }
     
     private var backgroundColor: Color {

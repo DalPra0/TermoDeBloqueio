@@ -3,6 +3,11 @@ import SwiftUI
 struct LetterBoxView: View {
     let letter: String
     let status: LetterStatus
+    var size: CGFloat = 62
+    
+    private var fontSize: CGFloat {
+        size * 0.52
+    }
     
     var body: some View {
         ZStack {
@@ -15,11 +20,11 @@ struct LetterBoxView: View {
             
             if !letter.isEmpty {
                 Text(letter.uppercased())
-                    .font(.system(size: 32, weight: .bold))
+                    .font(.system(size: fontSize, weight: .bold))
                     .foregroundColor(textColor)
             }
         }
-        .frame(width: 62, height: 62)
+        .frame(width: size, height: size)
     }
     
     private var backgroundColor: Color {

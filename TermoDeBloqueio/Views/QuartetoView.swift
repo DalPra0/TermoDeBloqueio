@@ -3,6 +3,11 @@ import SwiftUI
 struct TinyLetterBoxView: View {
     let letter: String
     let status: LetterStatus
+    var size: CGFloat = 24
+    
+    private var fontSize: CGFloat {
+        size * 0.5
+    }
     
     var body: some View {
         ZStack {
@@ -15,11 +20,11 @@ struct TinyLetterBoxView: View {
             
             if !letter.isEmpty {
                 Text(letter.uppercased())
-                    .font(.system(size: 12, weight: .bold))
+                    .font(.system(size: fontSize, weight: .bold))
                     .foregroundColor(textColor)
             }
         }
-        .frame(width: 24, height: 24)
+        .frame(width: size, height: size)
     }
     
     private var backgroundColor: Color {
@@ -57,13 +62,15 @@ struct TinyLetterBoxView: View {
 struct QuartetoGuessRowView: View {
     let letters: [Letter]
     let currentGuess: String
+    let boxSize: CGFloat
     
     var body: some View {
-        HStack(spacing: 1.5) {
+        HStack(spacing: 3) {
             ForEach(0..<5, id: \.self) { index in
                 TinyLetterBoxView(
                     letter: getLetter(at: index),
-                    status: getStatus(at: index)
+                    status: getStatus(at: index),
+                    size: boxSize
                 )
             }
         }
@@ -93,13 +100,21 @@ struct QuartetoGameGridView: View {
     @ObservedObject var gameState: SingleGameState
     let currentGuess: String
     let maxAttempts: Int
+    let availableWidth: CGFloat
+    
+    private var boxSize: CGFloat {
+        let totalSpacing: CGFloat = 4 * 3
+        let available = availableWidth - totalSpacing
+        return min(available / 5, 28)
+    }
     
     var body: some View {
-        VStack(spacing: 1.5) {
+        VStack(spacing: 3) {
             ForEach(0..<maxAttempts, id: \.self) { index in
                 QuartetoGuessRowView(
                     letters: getLetters(for: index),
-                    currentGuess: index == gameState.guesses.count ? currentGuess : ""
+                    currentGuess: index == gameState.guesses.count ? currentGuess : "",
+                    boxSize: boxSize
                 )
             }
         }
@@ -118,66 +133,72 @@ struct QuartetoView: View {
     @StateObject private var viewModel = QuartetoViewModel()
     
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                Text("QUARTETO")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(.primary)
-                    .padding(.top, 8)
-                
-                ScrollView {
-                    VStack(spacing: 3) {
-                        HStack(spacing: 3) {
-                            QuartetoGameGridView(
-                                gameState: viewModel.game1,
-                                currentGuess: viewModel.currentGuess,
-                                maxAttempts: viewModel.maxAttempts
-                            )
+        GeometryReader { geometry in
+            ZStack {
+                VStack(spacing: 0) {
+                    Text("QUARTETO")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.primary)
+                        .padding(.top, 8)
+                    
+                    ScrollView {
+                        VStack(spacing: 8) {
+                            HStack(spacing: 8) {
+                                QuartetoGameGridView(
+                                    gameState: viewModel.game1,
+                                    currentGuess: viewModel.currentGuess,
+                                    maxAttempts: viewModel.maxAttempts,
+                                    availableWidth: (geometry.size.width - 8 - 16) / 2
+                                )
+                                
+                                QuartetoGameGridView(
+                                    gameState: viewModel.game2,
+                                    currentGuess: viewModel.currentGuess,
+                                    maxAttempts: viewModel.maxAttempts,
+                                    availableWidth: (geometry.size.width - 8 - 16) / 2
+                                )
+                            }
                             
-                            QuartetoGameGridView(
-                                gameState: viewModel.game2,
-                                currentGuess: viewModel.currentGuess,
-                                maxAttempts: viewModel.maxAttempts
-                            )
+                            HStack(spacing: 8) {
+                                QuartetoGameGridView(
+                                    gameState: viewModel.game3,
+                                    currentGuess: viewModel.currentGuess,
+                                    maxAttempts: viewModel.maxAttempts,
+                                    availableWidth: (geometry.size.width - 8 - 16) / 2
+                                )
+                                
+                                QuartetoGameGridView(
+                                    gameState: viewModel.game4,
+                                    currentGuess: viewModel.currentGuess,
+                                    maxAttempts: viewModel.maxAttempts,
+                                    availableWidth: (geometry.size.width - 8 - 16) / 2
+                                )
+                            }
                         }
-                        
-                        HStack(spacing: 3) {
-                            QuartetoGameGridView(
-                                gameState: viewModel.game3,
-                                currentGuess: viewModel.currentGuess,
-                                maxAttempts: viewModel.maxAttempts
-                            )
-                            
-                            QuartetoGameGridView(
-                                gameState: viewModel.game4,
-                                currentGuess: viewModel.currentGuess,
-                                maxAttempts: viewModel.maxAttempts
-                            )
-                        }
+                        .padding(.horizontal, 8)
+                        .padding(.top, 4)
                     }
-                    .padding(.horizontal, 4)
-                    .padding(.top, 4)
+                    
+                    if !viewModel.errorMessage.isEmpty {
+                        Text(viewModel.errorMessage)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .padding(.vertical, 4)
+                    }
+                    
+                    KeyboardView(
+                        currentGuess: viewModel.currentGuess,
+                        keyboardStatus: viewModel.keyboardStatus,
+                        onLetterTap: { viewModel.addLetter($0) },
+                        onDeleteTap: { viewModel.deleteLetter() },
+                        onEnterTap: { viewModel.submitGuess() }
+                    )
                 }
+                .background(Color.white)
                 
-                if !viewModel.errorMessage.isEmpty {
-                    Text(viewModel.errorMessage)
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .padding(.vertical, 4)
+                if viewModel.overallGameState != .playing {
+                    gameOverView
                 }
-                
-                KeyboardView(
-                    currentGuess: viewModel.currentGuess,
-                    keyboardStatus: viewModel.keyboardStatus,
-                    onLetterTap: { viewModel.addLetter($0) },
-                    onDeleteTap: { viewModel.deleteLetter() },
-                    onEnterTap: { viewModel.submitGuess() }
-                )
-            }
-            .background(Color.white)
-            
-            if viewModel.overallGameState != .playing {
-                gameOverView
             }
         }
     }
