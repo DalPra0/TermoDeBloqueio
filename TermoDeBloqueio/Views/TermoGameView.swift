@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TermoGameView: View {
     @StateObject private var viewModel = GameViewModel()
+    @EnvironmentObject var coordinator: AppCoordinator
     @State private var headerScale: CGFloat = 0.8
     
     var body: some View {
@@ -38,15 +39,37 @@ struct TermoGameView: View {
     
     private var headerView: some View {
         VStack(spacing: 4) {
-            Text("TERMO")
-                .font(.system(size: 36, weight: .black))
-                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
-                .scaleEffect(headerScale)
+            HStack {
+                Button(action: {
+                    coordinator.showLockScreen()
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Voltar")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .foregroundColor(Color(red: 0.40, green: 0.71, blue: 0.38))
+                }
+                .padding(.leading, 20)
+                
+                Spacer()
+                
+                Text("TERMO")
+                    .font(.system(size: 28, weight: .black))
+                    .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                    .scaleEffect(headerScale)
+                
+                Spacer()
+                
+                Color.clear
+                    .frame(width: 80)
+            }
+            .padding(.vertical, 12)
             
             Divider()
                 .background(Color.gray.opacity(0.3))
         }
-        .padding(.top)
         .onAppear {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                 headerScale = 1.0
@@ -92,11 +115,15 @@ struct TermoGameView: View {
                 }
                 
                 Button(action: {
-                    withAnimation {
-                        viewModel.startNewGame()
+                    if viewModel.gameState == .won {
+                        coordinator.showLockScreen()
+                    } else {
+                        withAnimation {
+                            viewModel.startNewGame()
+                        }
                     }
                 }) {
-                    Text("Jogar Novamente")
+                    Text(viewModel.gameState == .won ? "Continuar" : "Tentar Novamente")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.white)
                         .padding(.horizontal, 32)

@@ -131,6 +131,8 @@ struct QuartetoGameGridView: View {
 
 struct QuartetoView: View {
     @StateObject private var viewModel = QuartetoViewModel()
+    @EnvironmentObject var coordinator: AppCoordinator
+    @State private var headerScale: CGFloat = 0.8
     
     var body: some View {
         GeometryReader { geometry in
@@ -139,10 +141,43 @@ struct QuartetoView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    Text("QUARTETO")
-                        .font(.system(size: 16, weight: .black))
-                        .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
-                        .padding(.vertical, 2)
+                    VStack(spacing: 4) {
+                        HStack {
+                            Button(action: {
+                                coordinator.showLockScreen()
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 14, weight: .semibold))
+                                    Text("Voltar")
+                                        .font(.system(size: 14, weight: .semibold))
+                                }
+                                .foregroundColor(Color(red: 0.45, green: 0.45, blue: 0.45))
+                            }
+                            .padding(.leading, 16)
+                            
+                            Spacer()
+                            
+                            Text("QUARTETO")
+                                .font(.system(size: 20, weight: .black))
+                                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                                .scaleEffect(headerScale)
+                            
+                            Spacer()
+                            
+                            Color.clear
+                                .frame(width: 70)
+                        }
+                        .padding(.vertical, 10)
+                        
+                        Divider()
+                            .background(Color.gray.opacity(0.3))
+                    }
+                    .onAppear {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                            headerScale = 1.0
+                        }
+                    }
                     
                     ScrollView {
                         VStack(spacing: 14) {
@@ -205,17 +240,6 @@ struct QuartetoView: View {
         }
     }
     
-    private var headerView: some View {
-        VStack(spacing: 4) {
-            Text("QUARTETO")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.primary)
-            
-            Divider()
-        }
-        .padding(.top, 8)
-    }
-    
     private var gameOverView: some View {
         ZStack {
             Color.black.opacity(0.4)
@@ -272,11 +296,15 @@ struct QuartetoView: View {
                 }
                 
                 Button(action: {
-                    withAnimation {
-                        viewModel.startNewGame()
+                    if viewModel.overallGameState == .won {
+                        coordinator.showLockScreen()
+                    } else {
+                        withAnimation {
+                            viewModel.startNewGame()
+                        }
                     }
                 }) {
-                    Text("Jogar Novamente")
+                    Text(viewModel.overallGameState == .won ? "Continuar" : "Tentar Novamente")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.white)
                         .padding(.horizontal, 32)

@@ -44,18 +44,7 @@ struct LockScreenView: View {
                 }
                 .opacity(showContent ? 1.0 : 0.0)
                 
-                VStack(spacing: 16) {
-                    ForEach(getRequiredGames(), id: \.self) { gameType in
-                        GameProgressCard(
-                            gameType: gameType,
-                            isCompleted: blockManager.dailyProgress.completedGames.contains(gameType)
-                        )
-                    }
-                }
-                .padding(.horizontal, 32)
-                .opacity(showContent ? 1.0 : 0.0)
-                
-                VStack(spacing: 16) {
+                VStack(spacing: 12) {
                     ForEach(getRequiredGames(), id: \.self) { gameType in
                         GameProgressCard(
                             gameType: gameType,
