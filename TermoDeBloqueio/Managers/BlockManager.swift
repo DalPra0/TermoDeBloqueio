@@ -12,6 +12,7 @@ class BlockManager: ObservableObject {
     private let difficultyKey = "selectedDifficulty"
     private let progressKey = "dailyProgress"
     private let debugBlockKey = "debugBlock"
+    private let appBlockingManager = AppBlockingManager.shared
     
     private init() {
         let today = Self.getTodayString()
@@ -63,6 +64,12 @@ class BlockManager: ObservableObject {
     private func updateBlockState() {
         let debugBlock = userDefaults.bool(forKey: debugBlockKey)
         isBlocked = debugBlock ? true : !dailyProgress.isUnlocked
+        
+        if isBlocked {
+            appBlockingManager.blockApps()
+        } else {
+            appBlockingManager.unblockApps()
+        }
     }
     
     private func saveProgress() {

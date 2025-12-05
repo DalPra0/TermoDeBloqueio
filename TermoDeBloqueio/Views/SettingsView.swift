@@ -63,6 +63,43 @@ struct SettingsView: View {
                         )
                         
                         VStack(alignment: .leading, spacing: 16) {
+                            Text("Apps Bloqueados")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(Color(red: 0.30, green: 0.30, blue: 0.30))
+                            
+                            Button(action: {
+                                coordinator.showAppSelection()
+                            }) {
+                                HStack {
+                                    Image(systemName: "app.badge.fill")
+                                        .font(.system(size: 18, weight: .semibold))
+                                    
+                                    Text("Selecionar Apps")
+                                        .font(.system(size: 15, weight: .semibold))
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundColor(Color(red: 0.70, green: 0.70, blue: 0.70))
+                                }
+                                .foregroundColor(.white)
+                                .padding(.vertical, 16)
+                                .padding(.horizontal, 20)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color(red: 0.40, green: 0.71, blue: 0.38))
+                                )
+                            }
+                        }
+                        .padding(20)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color.white)
+                                .shadow(color: Color.black.opacity(0.05), radius: 8, y: 2)
+                        )
+                        
+                        VStack(alignment: .leading, spacing: 16) {
                             Text("Progresso Hoje")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(Color(red: 0.30, green: 0.30, blue: 0.30))

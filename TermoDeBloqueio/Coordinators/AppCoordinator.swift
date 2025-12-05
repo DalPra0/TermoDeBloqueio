@@ -28,6 +28,7 @@ class AppCoordinator: ObservableObject {
         case quarteto
         case settings
         case lockScreen
+        case appSelection
     }
     
     func showMenu() {
@@ -52,5 +53,9 @@ class AppCoordinator: ObservableObject {
     
     func showLockScreen() {
         currentView = .lockScreen
+    }
+    
+    func showAppSelection() {
+        currentView = .appSelection
     }
 }

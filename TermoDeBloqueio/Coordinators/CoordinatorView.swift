@@ -25,6 +25,9 @@ struct CoordinatorView: View {
                 case .lockScreen:
                     LockScreenView()
                         .environmentObject(coordinator)
+                case .appSelection:
+                    AppSelectionView()
+                        .environmentObject(coordinator)
                 }
             }
             .navigationBarHidden(true)

@@ -6,14 +6,101 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		15A884332EE3587E00AFBCF8 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A884322EE3587E00AFBCF8 /* ManagedSettings.framework */; };
+		15A884352EE3587E00AFBCF8 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A884342EE3587E00AFBCF8 /* ManagedSettingsUI.framework */; };
+		15A8843D2EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 15A884302EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		15A884482EE3589500AFBCF8 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A884322EE3587E00AFBCF8 /* ManagedSettings.framework */; };
+		15A884502EE3589500AFBCF8 /* TermoDeBloqueioShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 15A884472EE3589500AFBCF8 /* TermoDeBloqueioShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		15A8843B2EE3587E00AFBCF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 154666662EDE1B18005FF466 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15A8842F2EE3587E00AFBCF8;
+			remoteInfo = TermoDeBloqueioShieldConfiguration;
+		};
+		15A8844E2EE3589500AFBCF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 154666662EDE1B18005FF466 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15A884462EE3589500AFBCF8;
+			remoteInfo = TermoDeBloqueioShieldAction;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		15A884422EE3587E00AFBCF8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				15A884502EE3589500AFBCF8 /* TermoDeBloqueioShieldAction.appex in Embed Foundation Extensions */,
+				15A8843D2EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1546666E2EDE1B18005FF466 /* TermoDeBloqueio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermoDeBloqueio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		15A884302EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermoDeBloqueioShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		15A884322EE3587E00AFBCF8 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
+		15A884342EE3587E00AFBCF8 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = System/Library/Frameworks/ManagedSettingsUI.framework; sourceTree = SDKROOT; };
+		15A884472EE3589500AFBCF8 /* TermoDeBloqueioShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermoDeBloqueioShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		15A8843E2EE3587E00AFBCF8 /* Exceptions for "TermoDeBloqueioShieldConfiguration" folder in "TermoDeBloqueioShieldConfiguration" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 15A8842F2EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */;
+		};
+		15A884512EE3589500AFBCF8 /* Exceptions for "TermoDeBloqueioShieldAction" folder in "TermoDeBloqueioShieldAction" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 15A884462EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */;
+		};
+		15A884582EE3598D00AFBCF8 /* Exceptions for "TermoDeBloqueio" folder in "TermoDeBloqueio" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 1546666D2EDE1B18005FF466 /* TermoDeBloqueio */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		154666702EDE1B18005FF466 /* TermoDeBloqueio */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				15A884582EE3598D00AFBCF8 /* Exceptions for "TermoDeBloqueio" folder in "TermoDeBloqueio" target */,
+			);
 			path = TermoDeBloqueio;
+			sourceTree = "<group>";
+		};
+		15A884362EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				15A8843E2EE3587E00AFBCF8 /* Exceptions for "TermoDeBloqueioShieldConfiguration" folder in "TermoDeBloqueioShieldConfiguration" target */,
+			);
+			path = TermoDeBloqueioShieldConfiguration;
+			sourceTree = "<group>";
+		};
+		15A884492EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				15A884512EE3589500AFBCF8 /* Exceptions for "TermoDeBloqueioShieldAction" folder in "TermoDeBloqueioShieldAction" target */,
+			);
+			path = TermoDeBloqueioShieldAction;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,6 +113,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		15A8842D2EE3587E00AFBCF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				15A884332EE3587E00AFBCF8 /* ManagedSettings.framework in Frameworks */,
+				15A884352EE3587E00AFBCF8 /* ManagedSettingsUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		15A884442EE3589500AFBCF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				15A884482EE3589500AFBCF8 /* ManagedSettings.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -33,6 +137,9 @@
 			isa = PBXGroup;
 			children = (
 				154666702EDE1B18005FF466 /* TermoDeBloqueio */,
+				15A884362EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */,
+				15A884492EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */,
+				15A884312EE3587E00AFBCF8 /* Frameworks */,
 				1546666F2EDE1B18005FF466 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,8 +148,19 @@
 			isa = PBXGroup;
 			children = (
 				1546666E2EDE1B18005FF466 /* TermoDeBloqueio.app */,
+				15A884302EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration.appex */,
+				15A884472EE3589500AFBCF8 /* TermoDeBloqueioShieldAction.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		15A884312EE3587E00AFBCF8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				15A884322EE3587E00AFBCF8 /* ManagedSettings.framework */,
+				15A884342EE3587E00AFBCF8 /* ManagedSettingsUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,10 +173,13 @@
 				1546666A2EDE1B18005FF466 /* Sources */,
 				1546666B2EDE1B18005FF466 /* Frameworks */,
 				1546666C2EDE1B18005FF466 /* Resources */,
+				15A884422EE3587E00AFBCF8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				15A8843C2EE3587E00AFBCF8 /* PBXTargetDependency */,
+				15A8844F2EE3589500AFBCF8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				154666702EDE1B18005FF466 /* TermoDeBloqueio */,
@@ -69,6 +190,50 @@
 			productName = TermoDeBloqueio;
 			productReference = 1546666E2EDE1B18005FF466 /* TermoDeBloqueio.app */;
 			productType = "com.apple.product-type.application";
+		};
+		15A8842F2EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 15A8843F2EE3587E00AFBCF8 /* Build configuration list for PBXNativeTarget "TermoDeBloqueioShieldConfiguration" */;
+			buildPhases = (
+				15A8842C2EE3587E00AFBCF8 /* Sources */,
+				15A8842D2EE3587E00AFBCF8 /* Frameworks */,
+				15A8842E2EE3587E00AFBCF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				15A884362EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */,
+			);
+			name = TermoDeBloqueioShieldConfiguration;
+			packageProductDependencies = (
+			);
+			productName = TermoDeBloqueioShieldConfiguration;
+			productReference = 15A884302EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		15A884462EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 15A884522EE3589500AFBCF8 /* Build configuration list for PBXNativeTarget "TermoDeBloqueioShieldAction" */;
+			buildPhases = (
+				15A884432EE3589500AFBCF8 /* Sources */,
+				15A884442EE3589500AFBCF8 /* Frameworks */,
+				15A884452EE3589500AFBCF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				15A884492EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */,
+			);
+			name = TermoDeBloqueioShieldAction;
+			packageProductDependencies = (
+			);
+			productName = TermoDeBloqueioShieldAction;
+			productReference = 15A884472EE3589500AFBCF8 /* TermoDeBloqueioShieldAction.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +246,12 @@
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					1546666D2EDE1B18005FF466 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
+					15A8842F2EE3587E00AFBCF8 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
+					15A884462EE3589500AFBCF8 = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
 				};
@@ -100,12 +271,28 @@
 			projectRoot = "";
 			targets = (
 				1546666D2EDE1B18005FF466 /* TermoDeBloqueio */,
+				15A8842F2EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */,
+				15A884462EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1546666C2EDE1B18005FF466 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		15A8842E2EE3587E00AFBCF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		15A884452EE3589500AFBCF8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +309,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		15A8842C2EE3587E00AFBCF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		15A884432EE3589500AFBCF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		15A8843C2EE3587E00AFBCF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15A8842F2EE3587E00AFBCF8 /* TermoDeBloqueioShieldConfiguration */;
+			targetProxy = 15A8843B2EE3587E00AFBCF8 /* PBXContainerItemProxy */;
+		};
+		15A8844F2EE3589500AFBCF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15A884462EE3589500AFBCF8 /* TermoDeBloqueioShieldAction */;
+			targetProxy = 15A8844E2EE3589500AFBCF8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		154666772EDE1B1A005FF466 /* Debug */ = {
@@ -251,11 +465,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TermoDeBloqueio/TermoDeBloqueio.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 982D3NRR89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermoDeBloqueio/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,11 +500,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TermoDeBloqueio/TermoDeBloqueio.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 982D3NRR89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermoDeBloqueio/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -305,6 +523,122 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		15A884402EE3587E00AFBCF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TermoDeBloqueioShieldConfiguration/TermoDeBloqueioShieldConfiguration.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 982D3NRR89;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermoDeBloqueioShieldConfiguration/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermoDeBloqueioShieldConfiguration;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dalpra.TermoDeBloqueio.TermoDeBloqueioShieldConfiguration;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		15A884412EE3587E00AFBCF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TermoDeBloqueioShieldConfiguration/TermoDeBloqueioShieldConfiguration.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 982D3NRR89;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermoDeBloqueioShieldConfiguration/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermoDeBloqueioShieldConfiguration;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dalpra.TermoDeBloqueio.TermoDeBloqueioShieldConfiguration;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		15A884532EE3589500AFBCF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TermoDeBloqueioShieldAction/TermoDeBloqueioShieldAction.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 982D3NRR89;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermoDeBloqueioShieldAction/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermoDeBloqueioShieldAction;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dalpra.TermoDeBloqueio.TermoDeBloqueioShieldAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		15A884542EE3589500AFBCF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TermoDeBloqueioShieldAction/TermoDeBloqueioShieldAction.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 982D3NRR89;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermoDeBloqueioShieldAction/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermoDeBloqueioShieldAction;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dalpra.TermoDeBloqueio.TermoDeBloqueioShieldAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -329,6 +663,24 @@
 			buildConfigurations = (
 				1546667A2EDE1B1A005FF466 /* Debug */,
 				1546667B2EDE1B1A005FF466 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		15A8843F2EE3587E00AFBCF8 /* Build configuration list for PBXNativeTarget "TermoDeBloqueioShieldConfiguration" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				15A884402EE3587E00AFBCF8 /* Debug */,
+				15A884412EE3587E00AFBCF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		15A884522EE3589500AFBCF8 /* Build configuration list for PBXNativeTarget "TermoDeBloqueioShieldAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				15A884532EE3589500AFBCF8 /* Debug */,
+				15A884542EE3589500AFBCF8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
