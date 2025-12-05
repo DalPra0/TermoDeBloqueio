@@ -93,9 +93,14 @@ struct TermoGameView: View {
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
                     
-                    Text("Você acertou!")
+                    Text("Você completou o Termo!")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
+                    
+                    Text("Continue para ver seu progresso")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                        .padding(.top, 4)
                 } else {
                     Text("×")
                         .font(.system(size: 60, weight: .bold))
@@ -112,6 +117,11 @@ struct TermoGameView: View {
                     Text(WordData.shared.getDailyWord().uppercased())
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                    
+                    Text("Tente novamente!")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                        .padding(.top, 4)
                 }
                 
                 Button(action: {

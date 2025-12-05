@@ -5,40 +5,66 @@ struct LockScreenView: View {
     @StateObject private var blockManager = BlockManager.shared
     @State private var showContent = false
     @State private var pulseAnimation = false
+    @State private var showCelebration = false
     
     var body: some View {
         ZStack {
-            Color(red: 0.15, green: 0.15, blue: 0.15)
+            // Fundo baseado no estado
+            (blockManager.isBlocked 
+                ? Color(red: 0.15, green: 0.15, blue: 0.15)
+                : Color(red: 0.40, green: 0.71, blue: 0.38))
                 .ignoresSafeArea()
+                .animation(.easeInOut(duration: 0.5), value: blockManager.isBlocked)
             
             VStack(spacing: 40) {
                 Spacer()
                 
+                // Ícone - muda baseado no estado
                 ZStack {
-                    Circle()
-                        .fill(Color(red: 0.90, green: 0.30, blue: 0.30).opacity(0.2))
-                        .frame(width: pulseAnimation ? 140 : 120, height: pulseAnimation ? 140 : 120)
-                        .blur(radius: 20)
-                    
-                    Circle()
-                        .fill(Color(red: 0.25, green: 0.25, blue: 0.25))
-                        .frame(width: 100, height: 100)
-                    
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 40, weight: .semibold))
-                        .foregroundColor(Color(red: 0.90, green: 0.30, blue: 0.30))
+                    if blockManager.isBlocked {
+                        // Bloqueado - vermelho pulsando
+                        Circle()
+                            .fill(Color(red: 0.90, green: 0.30, blue: 0.30).opacity(0.2))
+                            .frame(width: pulseAnimation ? 140 : 120, height: pulseAnimation ? 140 : 120)
+                            .blur(radius: 20)
+                        
+                        Circle()
+                            .fill(Color(red: 0.25, green: 0.25, blue: 0.25))
+                            .frame(width: 100, height: 100)
+                        
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 40, weight: .semibold))
+                            .foregroundColor(Color(red: 0.90, green: 0.30, blue: 0.30))
+                    } else {
+                        // Desbloqueado - verde celebrando
+                        Circle()
+                            .fill(Color.white.opacity(0.3))
+                            .frame(width: showCelebration ? 140 : 100, height: showCelebration ? 140 : 100)
+                            .blur(radius: 20)
+                        
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 100, height: 100)
+                        
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 50, weight: .bold))
+                            .foregroundColor(Color(red: 0.40, green: 0.71, blue: 0.38))
+                            .rotationEffect(.degrees(showCelebration ? 360 : 0))
+                    }
                 }
                 .scaleEffect(showContent ? 1.0 : 0.8)
                 .opacity(showContent ? 1.0 : 0.0)
                 
                 VStack(spacing: 12) {
-                    Text("Dispositivo Bloqueado")
+                    Text(blockManager.isBlocked ? "Dispositivo Bloqueado" : "Apps Desbloqueados!")
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(.white)
                     
                     Text(getMessage())
                         .font(.system(size: 16, weight: .regular))
-                        .foregroundColor(Color(red: 0.70, green: 0.70, blue: 0.70))
+                        .foregroundColor(blockManager.isBlocked 
+                            ? Color(red: 0.70, green: 0.70, blue: 0.70)
+                            : Color.white.opacity(0.9))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                 }
@@ -57,26 +83,56 @@ struct LockScreenView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    let nextGame = getNextIncompleteGame()
-                    if let game = nextGame {
-                        navigateToGame(game)
+                // Botões - mudam baseado no estado
+                if blockManager.isBlocked {
+                    Button(action: {
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                        generator.impactOccurred()
+                        
+                        let nextGame = getNextIncompleteGame()
+                        if let game = nextGame {
+                            navigateToGame(game)
+                        }
+                    }) {
+                        Text("Resolver Desafio")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(Color(red: 0.40, green: 0.71, blue: 0.38))
+                                    .shadow(color: Color(red: 0.40, green: 0.71, blue: 0.38).opacity(0.4), radius: 12, y: 6)
+                            )
                     }
-                }) {
-                    Text("Resolver Desafio")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(.white)
+                    .padding(.horizontal, 32)
+                } else {
+                    Button(action: {
+                        let generator = UINotificationFeedbackGenerator()
+                        generator.notificationOccurred(.success)
+                        coordinator.showMenu()
+                    }) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 18, weight: .bold))
+                            Text("Ir para Menu")
+                                .font(.system(size: 18, weight: .bold))
+                        }
+                        .foregroundColor(Color(red: 0.40, green: 0.71, blue: 0.38))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
-                                .fill(Color(red: 0.40, green: 0.71, blue: 0.38))
-                                .shadow(color: Color(red: 0.40, green: 0.71, blue: 0.38).opacity(0.4), radius: 12, y: 6)
+                                .fill(Color.white)
+                                .shadow(color: Color.black.opacity(0.1), radius: 12, y: 6)
                         )
+                    }
+                    .padding(.horizontal, 32)
                 }
-                .padding(.horizontal, 32)
                 
                 Button(action: {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
                     coordinator.showSettings()
                 }) {
                     HStack(spacing: 8) {
@@ -85,7 +141,9 @@ struct LockScreenView: View {
                         Text("Configurações")
                             .font(.system(size: 16, weight: .semibold))
                     }
-                    .foregroundColor(Color(red: 0.70, green: 0.70, blue: 0.70))
+                    .foregroundColor(blockManager.isBlocked 
+                        ? Color(red: 0.70, green: 0.70, blue: 0.70)
+                        : Color.white.opacity(0.8))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                 }
@@ -99,8 +157,26 @@ struct LockScreenView: View {
                 showContent = true
             }
             
-            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                pulseAnimation = true
+            if blockManager.isBlocked {
+                withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                    pulseAnimation = true
+                }
+            } else {
+                // Celebração ao desbloquear
+                withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+                    showCelebration = true
+                }
+                
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+            }
+        }
+        .onChange(of: blockManager.isBlocked) {
+            if !blockManager.isBlocked {
+                // Trigger celebração
+                withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+                    showCelebration = true
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ struct CoordinatorView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                // Tela principal baseada no estado
                 switch coordinator.currentView {
                 case .menu:
                     MenuView()
@@ -29,8 +30,17 @@ struct CoordinatorView: View {
                     AppSelectionView()
                         .environmentObject(coordinator)
                 }
+                
+                // Welcome overlay (primeira vez)
+                if coordinator.showWelcome {
+                    WelcomeView()
+                        .environmentObject(coordinator)
+                        .transition(.opacity)
+                        .zIndex(999)
+                }
             }
             .navigationBarHidden(true)
+            .animation(.easeInOut(duration: 0.3), value: coordinator.showWelcome)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

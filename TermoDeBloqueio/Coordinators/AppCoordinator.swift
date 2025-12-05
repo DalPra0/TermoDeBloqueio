@@ -3,22 +3,34 @@ import Combine
 
 class AppCoordinator: ObservableObject {
     @Published var currentView: AppView
+    @Published var showWelcome: Bool = false
     private let blockManager = BlockManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     init() {
+        // Verificar se é primeira vez
+        let hasSeenWelcome = UserDefaults.standard.bool(forKey: "hasSeenWelcome")
+        self.showWelcome = !hasSeenWelcome
+        
         self.currentView = blockManager.isBlocked ? .lockScreen : .menu
         
+        // Não forçar lockscreen enquanto está jogando
         blockManager.$isBlocked
             .sink { [weak self] isBlocked in
                 guard let self = self else { return }
-                if isBlocked && self.currentView != .settings && self.currentView != .lockScreen {
+                // Só redireciona automaticamente se não estiver em um jogo ativo
+                if isBlocked && self.currentView == .menu {
                     self.currentView = .lockScreen
                 } else if !isBlocked && self.currentView == .lockScreen {
                     self.currentView = .menu
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func dismissWelcome() {
+        UserDefaults.standard.set(true, forKey: "hasSeenWelcome")
+        showWelcome = false
     }
     
     enum AppView {

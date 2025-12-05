@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import UIKit
 
 class GameViewModel: ObservableObject {
     @Published var guesses: [Guess] = []
@@ -26,7 +27,7 @@ class GameViewModel: ObservableObject {
         errorMessage = ""
         keyboardStatus = [:]
         
-        print("Palavra do dia: \(targetWord)")
+        print("🎮 Nova partida de Termo iniciada")
     }
     
     func addLetter(_ letter: String) {
@@ -35,6 +36,7 @@ class GameViewModel: ObservableObject {
         
         currentGuess += letter.lowercased()
         errorMessage = ""
+        triggerHaptic(.light)
     }
     
     func deleteLetter() {
@@ -43,17 +45,20 @@ class GameViewModel: ObservableObject {
         
         currentGuess.removeLast()
         errorMessage = ""
+        triggerHaptic(.light)
     }
     
     func submitGuess() {
         guard gameState == .playing else { return }
         guard currentGuess.count == wordLength else {
             errorMessage = "Palavra muito curta"
+            triggerHaptic(.error)
             return
         }
         
         guard WordData.shared.isValidWord(currentGuess) else {
             errorMessage = "Palavra não encontrada"
+            triggerHaptic(.error)
             return
         }
         
@@ -66,12 +71,28 @@ class GameViewModel: ObservableObject {
         if currentGuess == targetWord {
             gameState = .won
             blockManager.markGameCompleted(.termo)
+            triggerHaptic(.success)
+            print("✅ Termo completado!")
         } else if guesses.count >= maxAttempts {
             gameState = .lost
+            triggerHaptic(.error)
+            print("❌ Termo falhou")
+        } else {
+            triggerHaptic(.medium)
         }
         
         currentGuess = ""
         errorMessage = ""
+    }
+    
+    private func triggerHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
+    
+    private func triggerHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
     }
     
     private func evaluateGuess(_ guess: String) -> [Letter] {
