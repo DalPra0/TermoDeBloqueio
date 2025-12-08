@@ -14,26 +14,20 @@ class AppCoordinator: ObservableObject {
         
         self.currentView = blockManager.isBlocked ? .lockScreen : .menu
         
-        // CORRIGIDO: Navegação inteligente que não trava o usuário durante jogos
+        // Melhorar sincronização de navegação com estado de bloqueio
         blockManager.$isBlocked
-            .dropFirst() // Ignora o valor inicial para evitar race condition
             .sink { [weak self] isBlocked in
                 guard let self = self else { return }
                 
-                print("🔄 Estado de bloqueio mudou: \(isBlocked ? "BLOQUEADO" : "DESBLOQUEADO")")
-                print("   View atual: \(self.currentView)")
+                let gameViews: [AppView] = [.termo, .dueto, .quarteto]
                 
-                // Se bloqueou E está no menu (não em jogo/settings)
-                if isBlocked && self.currentView == .menu {
-                    print("   → Redirecionando para LockScreen")
-                    DispatchQueue.main.async {
-                        self.currentView = .lockScreen
-                    }
+                // Se bloqueou E não está jogando, vai para lockscreen
+                if isBlocked && !gameViews.contains(self.currentView) {
+                    self.currentView = .lockScreen
                 }
-                // Se desbloqueou de qualquer lugar (exceto se já está no menu)
-                else if !isBlocked && self.currentView != .menu {
-                    print("   → Usuário pode navegar livremente")
-                    // NÃO força menu, deixa o usuário decidir
+                // Se desbloqueou de qualquer lugar, vai pro menu
+                else if !isBlocked {
+                    self.currentView = .menu
                 }
             }
             .store(in: &cancellables)

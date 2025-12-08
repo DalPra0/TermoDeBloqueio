@@ -77,8 +77,17 @@ class BlockManager: ObservableObject {
     }
     
     func markGameCompleted(_ gameType: GameType) {
-        // CORRIGIDO: Não chama checkAndResetIfNewDay aqui
-        // O timer já cuida disso
+        let today = Self.getTodayString()
+        
+        // Proteção contra race condition à meia-noite
+        // Se mudou de dia durante o jogo, não marca como completo
+        guard dailyProgress.date == today else {
+            print("⚠️ Dia mudou durante o jogo - resetando progresso sem marcar como completo")
+            dailyProgress = DailyProgress(date: today, difficulty: currentDifficulty)
+            saveProgress()
+            updateBlockState()
+            return
+        }
         
         dailyProgress.markCompleted(gameType)
         saveProgress()
