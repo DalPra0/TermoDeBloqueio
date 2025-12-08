@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import UIKit
 
 class DuetoViewModel: ObservableObject {
     @Published var game1: SingleGameState
@@ -38,6 +39,7 @@ class DuetoViewModel: ObservableObject {
         
         currentGuess += letter.lowercased()
         errorMessage = ""
+        triggerHaptic(.light)
     }
     
     func deleteLetter() {
@@ -46,17 +48,20 @@ class DuetoViewModel: ObservableObject {
         
         currentGuess.removeLast()
         errorMessage = ""
+        triggerHaptic(.light)
     }
     
     func submitGuess() {
         guard overallGameState == .playing else { return }
         guard currentGuess.count == wordLength else {
             errorMessage = "Palavra muito curta"
+            triggerHaptic(.error)
             return
         }
         
         guard WordData.shared.isValidWord(currentGuess) else {
             errorMessage = "Palavra não encontrada"
+            triggerHaptic(.error)
             return
         }
         
@@ -98,8 +103,24 @@ class DuetoViewModel: ObservableObject {
         if won1 && won2 {
             overallGameState = .won
             blockManager.markGameCompleted(.dueto)
+            triggerHaptic(.success)
+            print("✅ Dueto completado!")
         } else if maxAttemptsReached {
             overallGameState = .lost
+            triggerHaptic(.error)
+            print("❌ Dueto falhou")
+        } else {
+            triggerHaptic(.medium)
         }
+    }
+    
+    private func triggerHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
+    
+    private func triggerHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
     }
 }

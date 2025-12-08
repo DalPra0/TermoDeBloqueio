@@ -56,21 +56,25 @@ class AppBlockingManager: ObservableObject {
             return
         }
         
-        // CRÍTICO: Usar Set direto dos tokens
+        // CORRIGIDO: Bloqueia APENAS os apps selecionados
         let tokens = selection.applicationTokens
         store.shield.applications = tokens
         
-        // Também bloqueia em todas as categorias
-        store.shield.applicationCategories = .all(except: Set())
+        // REMOVIDO: Linha perigosa que bloqueava TODAS categorias
+        // store.shield.applicationCategories = .all(except: Set())
+        // ☝️ Isso bloqueava apps do sistema!
         
         print("🔒 BLOQUEIO ATIVADO")
         print("📱 Apps bloqueados: \(tokens.count)")
-        print("🎯 Tokens: \(tokens)")
+        if tokens.count <= 5 {
+            print("🎯 Tokens: \(tokens)")
+        }
     }
     
     func unblockApps() {
         store.shield.applications = nil
-        store.shield.applicationCategories = nil
+        // CORRIGIDO: Remove apenas o bloqueio de apps, não categorias
+        // (já não bloqueamos categorias mais)
         
         print("🔓 BLOQUEIO DESATIVADO")
         print("✅ Todos os apps desbloqueados")

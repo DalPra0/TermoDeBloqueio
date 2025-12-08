@@ -67,6 +67,29 @@ struct LockScreenView: View {
                             : Color.white.opacity(0.9))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
+                    
+                    // NOVO: Contador de progresso
+                    if blockManager.isBlocked {
+                        let remaining = getRemainingGames().count
+                        let total = getRequiredGames().count
+                        let completed = total - remaining
+                        
+                        HStack(spacing: 8) {
+                            ForEach(0..<total, id: \.self) { index in
+                                Circle()
+                                    .fill(index < completed 
+                                        ? Color(red: 0.40, green: 0.71, blue: 0.38)
+                                        : Color.white.opacity(0.3))
+                                    .frame(width: 8, height: 8)
+                            }
+                        }
+                        .padding(.top, 8)
+                        
+                        Text("\(completed)/\(total) jogos completados")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                            .padding(.top, 4)
+                    }
                 }
                 .opacity(showContent ? 1.0 : 0.0)
                 
@@ -183,12 +206,16 @@ struct LockScreenView: View {
     
     private func getMessage() -> String {
         let remaining = getRemainingGames()
+        let total = getRequiredGames().count
+        
         if remaining.isEmpty {
-            return "Você já completou todos os desafios!"
+            return "Parabéns! Você completou todos os desafios de hoje! 🎉"
         } else if remaining.count == 1 {
-            return "Complete o desafio para desbloquear"
+            let nextGame = getNextIncompleteGame()
+            let gameName = nextGame == .termo ? "Termo" : (nextGame == .dueto ? "Dueto" : "Quarteto")
+            return "Falta 1 jogo: \(gameName)"
         } else {
-            return "Complete os desafios para desbloquear"
+            return "Faltam \(remaining.count) de \(total) jogos"
         }
     }
     

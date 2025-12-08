@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import UIKit
 
 class QuartetoViewModel: ObservableObject {
     @Published var game1: SingleGameState
@@ -44,6 +45,7 @@ class QuartetoViewModel: ObservableObject {
         
         currentGuess += letter.lowercased()
         errorMessage = ""
+        triggerHaptic(.light)
     }
     
     func deleteLetter() {
@@ -52,17 +54,20 @@ class QuartetoViewModel: ObservableObject {
         
         currentGuess.removeLast()
         errorMessage = ""
+        triggerHaptic(.light)
     }
     
     func submitGuess() {
         guard overallGameState == .playing else { return }
         guard currentGuess.count == wordLength else {
             errorMessage = "Palavra muito curta"
+            triggerHaptic(.error)
             return
         }
         
         guard WordData.shared.isValidWord(currentGuess) else {
             errorMessage = "Palavra não encontrada"
+            triggerHaptic(.error)
             return
         }
         
@@ -105,8 +110,24 @@ class QuartetoViewModel: ObservableObject {
         if allWon {
             overallGameState = .won
             blockManager.markGameCompleted(.quarteto)
+            triggerHaptic(.success)
+            print("✅ Quarteto completado!")
         } else if maxAttemptsReached {
             overallGameState = .lost
+            triggerHaptic(.error)
+            print("❌ Quarteto falhou")
+        } else {
+            triggerHaptic(.medium)
         }
+    }
+    
+    private func triggerHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
+    
+    private func triggerHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
     }
 }

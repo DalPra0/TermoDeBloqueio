@@ -12,7 +12,9 @@ class BlockManager: ObservableObject {
     private let difficultyKey = "selectedDifficulty"
     private let progressKey = "dailyProgress"
     private let debugBlockKey = "debugBlock"
+    private let lastCheckDateKey = "lastCheckDate"
     private let appBlockingManager = AppBlockingManager.shared
+    private var midnightCheckTimer: Timer?
     
     private init() {
         let today = Self.getTodayString()
@@ -36,6 +38,33 @@ class BlockManager: ObservableObject {
         }
         
         updateBlockState()
+        setupMidnightCheck()
+    }
+    
+    // NOVO: Previne race condition na meia-noite
+    private func setupMidnightCheck() {
+        // Verifica a cada 1 minuto se mudou o dia
+        midnightCheckTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            self?.checkIfNewDay()
+        }
+    }
+    
+    private func checkIfNewDay() {
+        let today = Self.getTodayString()
+        let lastCheck = userDefaults.string(forKey: lastCheckDateKey) ?? ""
+        
+        if today != lastCheck {
+            print("📅 Novo dia detectado! Resetando progresso...")
+            userDefaults.set(today, forKey: lastCheckDateKey)
+            
+            // Reseta progresso na thread principal
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.dailyProgress = DailyProgress(date: today, difficulty: self.currentDifficulty)
+                self.saveProgress()
+                self.updateBlockState()
+            }
+        }
     }
     
     func setDifficulty(_ difficulty: Difficulty) {
@@ -48,11 +77,15 @@ class BlockManager: ObservableObject {
     }
     
     func markGameCompleted(_ gameType: GameType) {
-        checkAndResetIfNewDay()
+        // CORRIGIDO: Não chama checkAndResetIfNewDay aqui
+        // O timer já cuida disso
         
         dailyProgress.markCompleted(gameType)
         saveProgress()
         updateBlockState()
+        
+        print("✅ Jogo \(gameType) marcado como completo")
+        print("   Progresso: \(dailyProgress.completedGames.count)/\(currentDifficulty.gamesRequired.count)")
     }
     
     func resetProgress() {
@@ -63,7 +96,13 @@ class BlockManager: ObservableObject {
     
     private func updateBlockState() {
         let debugBlock = userDefaults.bool(forKey: debugBlockKey)
-        isBlocked = debugBlock ? true : !dailyProgress.isUnlocked
+        let shouldBlock = debugBlock ? true : !dailyProgress.isUnlocked
+        
+        // CORRIGIDO: Só atualiza se o estado realmente mudou
+        if isBlocked != shouldBlock {
+            isBlocked = shouldBlock
+            print("🔄 Estado mudou para: \(isBlocked ? "BLOQUEADO" : "DESBLOQUEADO")")
+        }
         
         if isBlocked {
             appBlockingManager.blockApps()
@@ -75,16 +114,12 @@ class BlockManager: ObservableObject {
     private func saveProgress() {
         if let data = try? JSONEncoder().encode(dailyProgress) {
             userDefaults.set(data, forKey: progressKey)
+            userDefaults.synchronize() // Força salvamento imediato
         }
     }
     
-    private func checkAndResetIfNewDay() {
-        let today = Self.getTodayString()
-        if dailyProgress.date != today {
-            dailyProgress = DailyProgress(date: today, difficulty: currentDifficulty)
-            saveProgress()
-        }
-    }
+    // REMOVIDO: checkAndResetIfNewDay - agora usa timer
+    // private func checkAndResetIfNewDay() { ... }
     
     func toggleDebugBlock() {
         let currentState = userDefaults.bool(forKey: debugBlockKey)
