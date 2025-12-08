@@ -1,10 +1,3 @@
-//
-//  ShieldConfigurationExtension.swift
-//  TermoDeBloqueioShieldConfiguration
-//
-//  Created by Lucas Dal Pra Brascher on 05/12/25.
-//
-
 import ManagedSettings
 import ManagedSettingsUI
 import UIKit

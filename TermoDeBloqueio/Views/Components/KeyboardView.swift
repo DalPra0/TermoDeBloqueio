@@ -68,7 +68,12 @@ struct KeyButton: View {
             withAnimation(.easeInOut(duration: 0.1)) {
                 isPressed = true
             }
+            
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            
             action()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation(.easeInOut(duration: 0.1)) {
                     isPressed = false
@@ -76,20 +81,32 @@ struct KeyButton: View {
             }
         }) {
             Text(key)
-                .font(.system(size: isSpecialKey ? 13 : 19, weight: .semibold))
+                .font(.system(size: isSpecialKey ? 15 : 22, weight: .bold, design: .rounded))
                 .foregroundColor(textColor)
-                .frame(maxWidth: isSpecialKey ? 60 : .infinity)
-                .frame(height: 58)
+                .frame(maxWidth: isSpecialKey ? 70 : .infinity)
+                .frame(height: 56)
                 .background(backgroundColor)
-                .cornerRadius(6)
-                .shadow(color: backgroundColor.opacity(0.3), radius: isPressed ? 1 : 3, y: isPressed ? 0 : 2)
+                .cornerRadius(8)
+                .shadow(color: backgroundColor.opacity(0.3), radius: isPressed ? 1 : 4, y: isPressed ? 0 : 2)
         }
-        .scaleEffect(isPressed ? 0.95 : 1.0)
+        .scaleEffect(isPressed ? 0.94 : 1.0)
         .animation(.easeInOut(duration: 0.1), value: isPressed)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(isSpecialKey ? "Botão especial" : "Letra \(key)")
     }
     
     private var isSpecialKey: Bool {
         key == "ENTER" || key == "⌫"
+    }
+    
+    private var accessibilityLabel: String {
+        if key == "ENTER" {
+            return "Enviar palavra"
+        } else if key == "⌫" {
+            return "Apagar letra"
+        } else {
+            return key
+        }
     }
     
     private var backgroundColor: Color {

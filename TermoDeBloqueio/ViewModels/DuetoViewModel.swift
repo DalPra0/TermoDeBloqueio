@@ -104,11 +104,11 @@ class DuetoViewModel: ObservableObject {
             overallGameState = .won
             blockManager.markGameCompleted(.dueto)
             triggerHaptic(.success)
-            print("✅ Dueto completado!")
+            print("Dueto completado")
         } else if maxAttemptsReached {
             overallGameState = .lost
             triggerHaptic(.error)
-            print("❌ Dueto falhou")
+            print("Dueto falhou")
         } else {
             triggerHaptic(.medium)
         }

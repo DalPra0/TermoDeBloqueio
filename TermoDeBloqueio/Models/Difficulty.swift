@@ -5,6 +5,10 @@ enum Difficulty: String, Codable, CaseIterable {
     case medium = "Médio"
     case hard = "Difícil"
     
+    var displayName: String {
+        return self.rawValue
+    }
+    
     var description: String {
         switch self {
         case .easy:
@@ -28,7 +32,7 @@ enum Difficulty: String, Codable, CaseIterable {
     }
 }
 
-enum GameType: String, Codable {
+enum GameType: String, Codable, Equatable {
     case termo
     case dueto
     case quarteto

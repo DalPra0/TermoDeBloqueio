@@ -72,11 +72,11 @@ class GameViewModel: ObservableObject {
             gameState = .won
             blockManager.markGameCompleted(.termo)
             triggerHaptic(.success)
-            print("✅ Termo completado!")
+            print("Termo completado")
         } else if guesses.count >= maxAttempts {
             gameState = .lost
             triggerHaptic(.error)
-            print("❌ Termo falhou")
+            print("Termo falhou")
         } else {
             triggerHaptic(.medium)
         }

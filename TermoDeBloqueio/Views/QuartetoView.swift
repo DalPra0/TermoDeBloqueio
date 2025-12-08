@@ -103,13 +103,13 @@ struct QuartetoGameGridView: View {
     let availableWidth: CGFloat
     
     private var boxSize: CGFloat {
-        let totalSpacing: CGFloat = 4 * 2
+        let totalSpacing: CGFloat = 4 * 4
         let available = availableWidth - totalSpacing
-        return min(available / 5, 22)
+        return max(min(available / 5, 38), 30)
     }
     
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 4) {
             ForEach(0..<maxAttempts, id: \.self) { index in
                 QuartetoGuessRowView(
                     letters: getLetters(for: index),
@@ -248,9 +248,9 @@ struct QuartetoView: View {
             
             VStack(spacing: 16) {
                 if viewModel.overallGameState == .won {
-                    Text("✓")
-                        .font(.system(size: 60, weight: .bold))
-                        .foregroundColor(Color(red: 0.45, green: 0.45, blue: 0.45))
+                    Circle()
+                        .fill(Color(red: 0.45, green: 0.45, blue: 0.45))
+                        .frame(width: 60, height: 60)
                     
                     Text("Parabéns!")
                         .font(.system(size: 28, weight: .bold))

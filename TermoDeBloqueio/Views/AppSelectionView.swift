@@ -151,16 +151,14 @@ struct AppSelectionView: View {
             selection: $appBlockingManager.selection
         )
         .onChange(of: appBlockingManager.selection) {
-            print("📱 SELEÇÃO ALTERADA!")
+            print("SELEÇÃO ALTERADA")
             print("   Apps selecionados: \(appBlockingManager.selection.applicationTokens.count)")
             print("   Tokens: \(appBlockingManager.selection.applicationTokens)")
             
-            // CRUCIAL: Salvar e aplicar bloqueio imediatamente após seleção
             if !appBlockingManager.selection.applicationTokens.isEmpty {
-                print("🔄 Aplicando bloqueio automaticamente...")
+                print("Aplicando bloqueio automaticamente")
                 Task {
-                    // Pequeno delay para garantir que a seleção foi salva
-                    try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 segundos
+                    try? await Task.sleep(nanoseconds: 500_000_000)
                     await MainActor.run {
                         appBlockingManager.blockApps()
                     }

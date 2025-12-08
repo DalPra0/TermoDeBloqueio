@@ -104,9 +104,9 @@ struct DuetoView: View {
             
             VStack(spacing: 16) {
                 if viewModel.overallGameState == .won {
-                    Text("✓")
-                        .font(.system(size: 60, weight: .bold))
-                        .foregroundColor(Color(red: 0.85, green: 0.73, blue: 0.20))
+                    Circle()
+                        .fill(Color(red: 0.85, green: 0.73, blue: 0.20))
+                        .frame(width: 60, height: 60)
                     
                     Text("Parabéns!")
                         .font(.system(size: 28, weight: .bold))

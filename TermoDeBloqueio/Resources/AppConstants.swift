@@ -1,13 +1,11 @@
 import SwiftUI
 
 struct AppConstants {
-    // MARK: - Game Rules
     static let wordLength = 5
     static let termoMaxAttempts = 6
     static let duetoMaxAttempts = 7
     static let quartetoMaxAttempts = 9
     
-    // MARK: - Colors
     struct Colors {
         static let correctGreen = Color(red: 0.40, green: 0.71, blue: 0.38)
         static let misplacedYellow = Color(red: 0.85, green: 0.73, blue: 0.20)
@@ -20,7 +18,6 @@ struct AppConstants {
         static let borderGray = Color(red: 0.53, green: 0.53, blue: 0.53)
     }
     
-    // MARK: - Animations
     struct Animation {
         static let springResponse: Double = 0.4
         static let springDamping: Double = 0.7
@@ -28,7 +25,6 @@ struct AppConstants {
         static let scaleEffect: CGFloat = 0.96
     }
     
-    // MARK: - Sizes
     struct Sizes {
         static let termoBoxSize: CGFloat = 62
         static let duetoBoxSize: CGFloat = 40

@@ -8,25 +8,18 @@ class AppCoordinator: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        // Verificar se é primeira vez
         let hasSeenWelcome = UserDefaults.standard.bool(forKey: "hasSeenWelcome")
         self.showWelcome = !hasSeenWelcome
         
         self.currentView = blockManager.isBlocked ? .lockScreen : .menu
         
-        // Melhorar sincronização de navegação com estado de bloqueio
         blockManager.$isBlocked
+            .dropFirst()
             .sink { [weak self] isBlocked in
                 guard let self = self else { return }
-                
-                let gameViews: [AppView] = [.termo, .dueto, .quarteto]
-                
-                // Se bloqueou E não está jogando, vai para lockscreen
-                if isBlocked && !gameViews.contains(self.currentView) {
+                if isBlocked && self.currentView == .menu {
                     self.currentView = .lockScreen
-                }
-                // Se desbloqueou de qualquer lugar, vai pro menu
-                else if !isBlocked {
+                } else if !isBlocked && self.currentView == .lockScreen {
                     self.currentView = .menu
                 }
             }

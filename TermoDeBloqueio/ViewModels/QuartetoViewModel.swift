@@ -111,11 +111,11 @@ class QuartetoViewModel: ObservableObject {
             overallGameState = .won
             blockManager.markGameCompleted(.quarteto)
             triggerHaptic(.success)
-            print("✅ Quarteto completado!")
+            print("Quarteto completado")
         } else if maxAttemptsReached {
             overallGameState = .lost
             triggerHaptic(.error)
-            print("❌ Quarteto falhou")
+            print("Quarteto falhou")
         } else {
             triggerHaptic(.medium)
         }

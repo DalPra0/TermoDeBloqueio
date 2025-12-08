@@ -126,7 +126,7 @@ struct SettingsView: View {
                                 
                                 Spacer()
                                 
-                                Text(blockManager.isBlocked ? "🔒 Bloqueado" : "✅ Desbloqueado")
+                                Text(blockManager.isBlocked ? "Bloqueado" : "Desbloqueado")
                                     .font(.system(size: 15, weight: .semibold))
                                     .foregroundColor(blockManager.isBlocked ? Color(red: 0.90, green: 0.30, blue: 0.30) : Color(red: 0.40, green: 0.71, blue: 0.38))
                             }
@@ -223,41 +223,98 @@ struct DifficultyButton: View {
         }
     }
     
+    var icon: String {
+        switch difficulty {
+        case .easy:
+            return "leaf.fill"
+        case .medium:
+            return "flame.fill"
+        case .hard:
+            return "bolt.fill"
+        }
+    }
+    
+    var detailedDescription: String {
+        switch difficulty {
+        case .easy:
+            return "Apenas 1 Termo por dia"
+        case .medium:
+            return "Termo + Dueto (3 palavras total)"
+        case .hard:
+            return "Termo + Dueto + Quarteto (7 palavras!)"
+        }
+    }
+    
     var body: some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .stroke(isSelected ? color : Color(red: 0.85, green: 0.85, blue: 0.85), lineWidth: 2)
-                        .frame(width: 24, height: 24)
-                    
-                    if isSelected {
+        Button(action: {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            action()
+        }) {
+            VStack(spacing: 12) {
+                HStack(spacing: 14) {
+                    ZStack {
                         Circle()
-                            .fill(color)
-                            .frame(width: 14, height: 14)
+                            .fill(isSelected ? color : Color(red: 0.92, green: 0.92, blue: 0.92))
+                            .frame(width: 48, height: 48)
+                        
+                        Image(systemName: icon)
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(isSelected ? .white : Color(red: 0.60, green: 0.60, blue: 0.60))
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Text(difficulty.rawValue)
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                            
+                            if isSelected {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(color)
+                            }
+                        }
+                        
+                        Text(detailedDescription)
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
+                        
+                        Text(difficulty.description)
+                            .font(.system(size: 13, weight: .regular, design: .rounded))
+                            .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                    }
+                    
+                    Spacer()
+                }
+                
+                HStack(spacing: 8) {
+                    ForEach(difficulty.gamesRequired, id: \.self) { game in
+                        HStack(spacing: 4) {
+                            Image(systemName: gameIcon(for: game))
+                                .font(.system(size: 11, weight: .semibold))
+                            Text(gameName(for: game))
+                                .font(.system(size: 11, weight: .medium, design: .rounded))
+                        }
+                        .foregroundColor(isSelected ? color : Color(red: 0.60, green: 0.60, blue: 0.60))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(
+                            Capsule()
+                                .fill(isSelected ? color.opacity(0.15) : Color(red: 0.95, green: 0.95, blue: 0.95))
+                        )
                     }
                 }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(difficulty.rawValue)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
-                    
-                    Text(difficulty.description)
-                        .font(.system(size: 13, weight: .regular))
-                        .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
-                }
-                
-                Spacer()
             }
-            .padding(16)
+            .padding(18)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? color.opacity(0.1) : Color(red: 0.98, green: 0.98, blue: 0.98))
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(isSelected ? color.opacity(0.08) : Color.white)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(isSelected ? color.opacity(0.3) : Color.clear, lineWidth: 1.5)
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(isSelected ? color.opacity(0.5) : Color(red: 0.92, green: 0.92, blue: 0.92), lineWidth: 2)
                     )
+                    .shadow(color: isSelected ? color.opacity(0.2) : .clear, radius: 8, y: 4)
             )
             .scaleEffect(isPressed ? 0.97 : 1.0)
         }
@@ -275,6 +332,30 @@ struct DifficultyButton: View {
                     }
                 }
         )
+        .accessibilityLabel("\(difficulty.rawValue) - \(detailedDescription)")
+        .accessibilityValue(isSelected ? "Selecionado" : "Não selecionado")
+    }
+    
+    private func gameIcon(for gameType: GameType) -> String {
+        switch gameType {
+        case .termo:
+            return "a.square.fill"
+        case .dueto:
+            return "square.split.2x1.fill"
+        case .quarteto:
+            return "square.grid.2x2.fill"
+        }
+    }
+    
+    private func gameName(for gameType: GameType) -> String {
+        switch gameType {
+        case .termo:
+            return "Termo"
+        case .dueto:
+            return "Dueto"
+        case .quarteto:
+            return "Quarteto"
+        }
     }
 }
 

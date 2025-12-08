@@ -41,9 +41,7 @@ class BlockManager: ObservableObject {
         setupMidnightCheck()
     }
     
-    // NOVO: Previne race condition na meia-noite
     private func setupMidnightCheck() {
-        // Verifica a cada 1 minuto se mudou o dia
         midnightCheckTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
             self?.checkIfNewDay()
         }
@@ -54,10 +52,9 @@ class BlockManager: ObservableObject {
         let lastCheck = userDefaults.string(forKey: lastCheckDateKey) ?? ""
         
         if today != lastCheck {
-            print("📅 Novo dia detectado! Resetando progresso...")
+            print("Novo dia detectado! Resetando progresso...")
             userDefaults.set(today, forKey: lastCheckDateKey)
             
-            // Reseta progresso na thread principal
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.dailyProgress = DailyProgress(date: today, difficulty: self.currentDifficulty)
@@ -79,10 +76,8 @@ class BlockManager: ObservableObject {
     func markGameCompleted(_ gameType: GameType) {
         let today = Self.getTodayString()
         
-        // Proteção contra race condition à meia-noite
-        // Se mudou de dia durante o jogo, não marca como completo
         guard dailyProgress.date == today else {
-            print("⚠️ Dia mudou durante o jogo - resetando progresso sem marcar como completo")
+            print("Dia mudou durante o jogo - resetando progresso sem marcar como completo")
             dailyProgress = DailyProgress(date: today, difficulty: currentDifficulty)
             saveProgress()
             updateBlockState()
@@ -93,7 +88,7 @@ class BlockManager: ObservableObject {
         saveProgress()
         updateBlockState()
         
-        print("✅ Jogo \(gameType) marcado como completo")
+        print("Jogo \(gameType) marcado como completo")
         print("   Progresso: \(dailyProgress.completedGames.count)/\(currentDifficulty.gamesRequired.count)")
     }
     
@@ -107,10 +102,9 @@ class BlockManager: ObservableObject {
         let debugBlock = userDefaults.bool(forKey: debugBlockKey)
         let shouldBlock = debugBlock ? true : !dailyProgress.isUnlocked
         
-        // CORRIGIDO: Só atualiza se o estado realmente mudou
         if isBlocked != shouldBlock {
             isBlocked = shouldBlock
-            print("🔄 Estado mudou para: \(isBlocked ? "BLOQUEADO" : "DESBLOQUEADO")")
+            print("Estado mudou para: \(isBlocked ? "BLOQUEADO" : "DESBLOQUEADO")")
         }
         
         if isBlocked {
@@ -123,12 +117,9 @@ class BlockManager: ObservableObject {
     private func saveProgress() {
         if let data = try? JSONEncoder().encode(dailyProgress) {
             userDefaults.set(data, forKey: progressKey)
-            userDefaults.synchronize() // Força salvamento imediato
+            userDefaults.synchronize()
         }
     }
-    
-    // REMOVIDO: checkAndResetIfNewDay - agora usa timer
-    // private func checkAndResetIfNewDay() { ... }
     
     func toggleDebugBlock() {
         let currentState = userDefaults.bool(forKey: debugBlockKey)

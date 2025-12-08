@@ -7,7 +7,6 @@ import Combine
 class AppBlockingManager: ObservableObject {
     static let shared = AppBlockingManager()
     
-    // CRÍTICO: Store nomeado para persistência
     private let store = ManagedSettingsStore(named: ManagedSettingsStore.Name("TermoDeBloqueio"))
     private let center = AuthorizationCenter.shared
     
@@ -24,9 +23,9 @@ class AppBlockingManager: ObservableObject {
             await MainActor.run {
                 isAuthorized = true
             }
-            print("✅ Autorização concedida!")
+            print("Autorização concedida")
         } catch {
-            print("❌ Erro ao solicitar autorização: \(error)")
+            print("Erro ao solicitar autorização: \(error)")
             await MainActor.run {
                 isAuthorized = false
             }
@@ -40,49 +39,42 @@ class AppBlockingManager: ObservableObject {
                 await MainActor.run {
                     isAuthorized = true
                 }
-                print("✅ Status: Autorizado")
+                print("Status: Autorizado")
             default:
                 await MainActor.run {
                     isAuthorized = false
                 }
-                print("⚠️ Status: Não autorizado")
+                print("Status: Não autorizado")
             }
         }
     }
     
     func blockApps() {
         guard !selection.applicationTokens.isEmpty else {
-            print("⚠️ Nenhum app selecionado para bloquear")
+            print("Nenhum app selecionado para bloquear")
             return
         }
         
-        // CORRIGIDO: Bloqueia APENAS os apps selecionados
         let tokens = selection.applicationTokens
         store.shield.applications = tokens
         
-        // REMOVIDO: Linha perigosa que bloqueava TODAS categorias
-        // store.shield.applicationCategories = .all(except: Set())
-        // ☝️ Isso bloqueava apps do sistema!
-        
-        print("🔒 BLOQUEIO ATIVADO")
-        print("📱 Apps bloqueados: \(tokens.count)")
+        print("BLOQUEIO ATIVADO")
+        print("Apps bloqueados: \(tokens.count)")
         if tokens.count <= 5 {
-            print("🎯 Tokens: \(tokens)")
+            print("Tokens: \(tokens)")
         }
     }
     
     func unblockApps() {
         store.shield.applications = nil
-        // CORRIGIDO: Remove apenas o bloqueio de apps, não categorias
-        // (já não bloqueamos categorias mais)
         
-        print("🔓 BLOQUEIO DESATIVADO")
-        print("✅ Todos os apps desbloqueados")
+        print("BLOQUEIO DESATIVADO")
+        print("Todos os apps desbloqueados")
     }
     
     func isBlocking() -> Bool {
         let blocking = store.shield.applications != nil
-        print("❓ isBlocking = \(blocking)")
+        print("isBlocking = \(blocking)")
         return blocking
     }
 }

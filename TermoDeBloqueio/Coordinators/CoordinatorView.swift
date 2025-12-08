@@ -6,7 +6,6 @@ struct CoordinatorView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // Tela principal baseada no estado
                 switch coordinator.currentView {
                 case .menu:
                     MenuView()
@@ -31,7 +30,6 @@ struct CoordinatorView: View {
                         .environmentObject(coordinator)
                 }
                 
-                // Welcome overlay (primeira vez)
                 if coordinator.showWelcome {
                     WelcomeView()
                         .environmentObject(coordinator)

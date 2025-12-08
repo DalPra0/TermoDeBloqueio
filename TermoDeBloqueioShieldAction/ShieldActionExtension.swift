@@ -1,10 +1,3 @@
-//
-//  ShieldActionExtension.swift
-//  TermoDeBloqueioShieldAction
-//
-//  Created by Lucas Dal Pra Brascher on 05/12/25.
-//
-
 import ManagedSettings
 import UIKit
 
