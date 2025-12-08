@@ -14,14 +14,19 @@ class AppCoordinator: ObservableObject {
         
         self.currentView = blockManager.isBlocked ? .lockScreen : .menu
         
-        // Não forçar lockscreen enquanto está jogando
+        // Melhorar sincronização de navegação com estado de bloqueio
         blockManager.$isBlocked
             .sink { [weak self] isBlocked in
                 guard let self = self else { return }
-                // Só redireciona automaticamente se não estiver em um jogo ativo
-                if isBlocked && self.currentView == .menu {
+                
+                let gameViews: [AppView] = [.termo, .dueto, .quarteto]
+                
+                // Se bloqueou E não está jogando, vai para lockscreen
+                if isBlocked && !gameViews.contains(self.currentView) {
                     self.currentView = .lockScreen
-                } else if !isBlocked && self.currentView == .lockScreen {
+                }
+                // Se desbloqueou de qualquer lugar, vai pro menu
+                else if !isBlocked {
                     self.currentView = .menu
                 }
             }

@@ -60,8 +60,8 @@ class AppBlockingManager: ObservableObject {
         let tokens = selection.applicationTokens
         store.shield.applications = tokens
         
-        // Também bloqueia em todas as categorias
-        store.shield.applicationCategories = .all(except: Set())
+        // REMOVIDO: store.shield.applicationCategories = .all(except: Set())
+        // Bloqueava TODAS as categorias desnecessariamente
         
         print("🔒 BLOQUEIO ATIVADO")
         print("📱 Apps bloqueados: \(tokens.count)")
