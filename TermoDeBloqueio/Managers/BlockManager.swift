@@ -51,9 +51,11 @@ class BlockManager: ObservableObject {
         let today = Self.getTodayString()
         
         // Proteção contra race condition à meia-noite
-        // Se mudou de dia durante o jogo, não marca como completo
+        // Se mudou de dia durante o jogo, não marca como completo (seria injusto)
+        // Diferente de checkAndResetIfNewDay(): aqui queremos PREVENIR marcar progresso
+        // em vez de silenciosamente resetar antes de marcar
         guard dailyProgress.date == today else {
-            print("⚠️ Dia mudou durante o jogo - resetando progresso")
+            print("⚠️ Dia mudou durante o jogo - resetando progresso sem marcar como completo")
             dailyProgress = DailyProgress(date: today, difficulty: currentDifficulty)
             saveProgress()
             updateBlockState()
