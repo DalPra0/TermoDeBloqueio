@@ -1,10 +1,13 @@
 import SwiftUI
 import Combine
+import FamilyControls
 
 struct MenuView: View {
     @State private var showContent = false
     @EnvironmentObject var coordinator: AppCoordinator
     @StateObject private var blockManager = BlockManager.shared
+    @StateObject private var appBlockingManager = AppBlockingManager.shared
+    @State private var showNoAppsAlert = false
     
     var body: some View {
         ZStack {
@@ -77,7 +80,7 @@ struct MenuView: View {
                     .scaleEffect(showContent ? 1.0 : 0.5)
                     .rotation3DEffect(.degrees(showContent ? 0 : 180), axis: (x: 0, y: 1, z: 0))
                     
-                    Text("TERMO")
+                    Text("PALAVRADA")
                         .font(.system(size: 44, weight: .black, design: .rounded))
                         .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
                         .scaleEffect(showContent ? 1.0 : 0.8)
@@ -113,10 +116,48 @@ struct MenuView: View {
                 }
                 .padding(.top, 20)
                 
+                if appBlockingManager.selection.applicationTokens.isEmpty {
+                    Button(action: {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                        coordinator.showSettings()
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(Color(red: 0.85, green: 0.73, blue: 0.20))
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Nenhum app selecionado")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                                
+                                Text("Toque para selecionar apps para bloquear")
+                                    .font(.system(size: 12, weight: .regular, design: .rounded))
+                                    .foregroundColor(Color(red: 0.50, green: 0.50, blue: 0.50))
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(Color(red: 0.70, green: 0.70, blue: 0.70))
+                        }
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color(red: 1.0, green: 0.98, blue: 0.90))
+                                .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
+                        )
+                    }
+                    .padding(.horizontal, 24)
+                    .opacity(showContent ? 1.0 : 0.0)
+                }
+                
                 Spacer()
                 
                 VStack(spacing: 16) {
-                    ForEach([GameType.termo, GameType.dueto, GameType.quarteto], id: \.self) { gameType in
+                    ForEach([GameType.palavrada, GameType.dueto, GameType.quarteto], id: \.self) { gameType in
                         let requiredGames = blockManager.currentDifficulty.gamesRequired
                         let isRequired = requiredGames.contains(gameType)
                         let isCompleted = blockManager.dailyProgress.completedGames.contains(gameType)
@@ -151,8 +192,8 @@ struct MenuView: View {
     
     private func navigateToGame(_ gameType: GameType) {
         switch gameType {
-        case .termo:
-            coordinator.showTermo()
+        case .palavrada:
+            coordinator.showPalavrada()
         case .dueto:
             coordinator.showDueto()
         case .quarteto:
@@ -162,14 +203,14 @@ struct MenuView: View {
     
     private func delayForGame(_ gameType: GameType) -> Double {
         switch gameType {
-        case .termo: return 0.1
+        case .palavrada: return 0.1
         case .dueto: return 0.2
         case .quarteto: return 0.3
         }
     }
     
     private func accessibilityLabel(for gameType: GameType, isRequired: Bool, isCompleted: Bool) -> String {
-        let name = gameType == .termo ? "Termo" : (gameType == .dueto ? "Dueto" : "Quarteto")
+        let name = gameType == .palavrada ? "Palavrada" : (gameType == .dueto ? "Dueto" : "Quarteto")
         var label = name
         if isCompleted {
             label += " - Completado hoje"
@@ -193,8 +234,8 @@ struct MenuButton: View {
     
     var title: String {
         switch gameType {
-        case .termo:
-            return "TERMO"
+        case .palavrada:
+            return "PALAVRADA"
         case .dueto:
             return "DUETO"
         case .quarteto:
@@ -204,7 +245,7 @@ struct MenuButton: View {
     
     var subtitle: String {
         switch gameType {
-        case .termo:
+        case .palavrada:
             return "1 palavra · 6 tentativas"
         case .dueto:
             return "2 palavras · 7 tentativas"
@@ -215,7 +256,7 @@ struct MenuButton: View {
     
     var color: Color {
         switch gameType {
-        case .termo:
+        case .palavrada:
             return Color(red: 0.40, green: 0.71, blue: 0.38)
         case .dueto:
             return Color(red: 0.85, green: 0.73, blue: 0.20)

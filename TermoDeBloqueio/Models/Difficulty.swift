@@ -12,28 +12,28 @@ enum Difficulty: String, Codable, CaseIterable {
     var description: String {
         switch self {
         case .easy:
-            return "Termo (1 palavra)"
+            return "Palavrada (1 palavra)"
         case .medium:
-            return "Termo + Dueto (3 palavras)"
+            return "Palavrada + Dueto (3 palavras)"
         case .hard:
-            return "Termo + Dueto + Quarteto (7 palavras)"
+            return "Palavrada + Dueto + Quarteto (7 palavras)"
         }
     }
     
     var gamesRequired: [GameType] {
         switch self {
         case .easy:
-            return [.termo]
+            return [.palavrada]
         case .medium:
-            return [.termo, .dueto]
+            return [.palavrada, .dueto]
         case .hard:
-            return [.termo, .dueto, .quarteto]
+            return [.palavrada, .dueto, .quarteto]
         }
     }
 }
 
 enum GameType: String, Codable, Equatable {
-    case termo
+    case palavrada
     case dueto
     case quarteto
 }

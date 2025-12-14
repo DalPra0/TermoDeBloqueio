@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TermoGameView: View {
+struct PalavradaGameView: View {
     @StateObject private var viewModel = GameViewModel()
     @EnvironmentObject var coordinator: AppCoordinator
     @State private var headerScale: CGFloat = 0.8
@@ -55,7 +55,7 @@ struct TermoGameView: View {
                 
                 Spacer()
                 
-                Text("TERMO")
+                Text("PALAVRADA")
                     .font(.system(size: 28, weight: .black))
                     .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
                     .scaleEffect(headerScale)
@@ -80,7 +80,7 @@ struct TermoGameView: View {
     private var gameOverView: some View {
         GameOverModal(
             isWin: viewModel.gameState == .won,
-            gameType: .termo,
+            gameType: .palavrada,
             onContinue: {
                 if viewModel.gameState == .won {
                     coordinator.showLockScreen()

@@ -245,7 +245,7 @@ struct GameOverModal: View {
     private func getMessage() -> String {
         if isWin {
             if allCompleted {
-                return "Você completou todos os desafios de hoje!\nSeus apps foram desbloqueados!"
+                return "Você completou todos os desafios de hoje!\nSeus apps foram desbloqueados! 🎉"
             } else {
                 let remaining = totalRequired - completedCount
                 if remaining == 1 {
@@ -255,7 +255,7 @@ struct GameOverModal: View {
                 }
             }
         } else {
-            return "Não foi dessa vez! Tente novamente e conquiste a vitória."
+            return "Suas tentativas acabaram, mas não desista!\nTente novamente para alcançar a vitória."
         }
     }
 }
@@ -263,7 +263,7 @@ struct GameOverModal: View {
 #Preview("Vitória - Parcial") {
     GameOverModal(
         isWin: true,
-        gameType: .termo,
+        gameType: .palavrada,
         onContinue: {},
         onRetry: {}
     )
@@ -281,7 +281,7 @@ struct GameOverModal: View {
 #Preview("Derrota") {
     GameOverModal(
         isWin: false,
-        gameType: .termo,
+        gameType: .palavrada,
         onContinue: {},
         onRetry: {}
     )

@@ -27,7 +27,7 @@ class GameViewModel: ObservableObject {
         errorMessage = ""
         keyboardStatus = [:]
         
-        print("🎮 Nova partida de Termo iniciada")
+        print("🎮 Nova partida de Palavrada iniciada")
     }
     
     func addLetter(_ letter: String) {
@@ -70,13 +70,14 @@ class GameViewModel: ObservableObject {
         
         if currentGuess == targetWord {
             gameState = .won
-            blockManager.markGameCompleted(.termo)
+            blockManager.markGameCompleted(.palavrada)
             triggerHaptic(.success)
-            print("Termo completado")
+            print("✅ PALAVRADA COMPLETADA!")
+            print("   Progresso: \(blockManager.dailyProgress.completedGames.count)/\(blockManager.currentDifficulty.gamesRequired.count)")
         } else if guesses.count >= maxAttempts {
             gameState = .lost
             triggerHaptic(.error)
-            print("Termo falhou")
+            print("Palavrada falhou")
         } else {
             triggerHaptic(.medium)
         }

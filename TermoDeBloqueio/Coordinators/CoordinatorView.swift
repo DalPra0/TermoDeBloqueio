@@ -10,8 +10,8 @@ struct CoordinatorView: View {
                 case .menu:
                     MenuView()
                         .environmentObject(coordinator)
-                case .termo:
-                    TermoGameView()
+                case .palavrada:
+                    PalavradaGameView()
                         .environmentObject(coordinator)
                 case .dueto:
                     DuetoView()

@@ -37,9 +37,36 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(spacing: 24) {
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Dificuldade do Bloqueio")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color(red: 0.30, green: 0.30, blue: 0.30))
+                            HStack {
+                                Text("Dificuldade do Bloqueio")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(Color(red: 0.30, green: 0.30, blue: 0.30))
+                                
+                                Spacer()
+                                
+                                if !blockManager.canChangeDifficulty {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "lock.fill")
+                                            .font(.system(size: 11, weight: .semibold))
+                                        Text("Bloqueado")
+                                            .font(.system(size: 12, weight: .semibold))
+                                    }
+                                    .foregroundColor(Color(red: 0.90, green: 0.30, blue: 0.30))
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color(red: 0.90, green: 0.30, blue: 0.30).opacity(0.15))
+                                    )
+                                }
+                            }
+                            
+                            if !blockManager.canChangeDifficulty {
+                                Text("Você já começou a jogar hoje. A dificuldade não pode ser alterada.")
+                                    .font(.system(size: 13, weight: .regular))
+                                    .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                                    .lineLimit(2)
+                            }
                             
                             VStack(spacing: 12) {
                                 ForEach(Difficulty.allCases, id: \.self) { difficulty in
@@ -47,11 +74,17 @@ struct SettingsView: View {
                                         difficulty: difficulty,
                                         isSelected: blockManager.currentDifficulty == difficulty,
                                         action: {
+                                            guard blockManager.canChangeDifficulty else {
+                                                let generator = UIImpactFeedbackGenerator(style: .rigid)
+                                                generator.impactOccurred()
+                                                return
+                                            }
                                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                                 blockManager.setDifficulty(difficulty)
                                             }
                                         }
                                     )
+                                    .opacity(blockManager.canChangeDifficulty ? 1.0 : 0.6)
                                 }
                             }
                         }
@@ -105,7 +138,7 @@ struct SettingsView: View {
                                 .foregroundColor(Color(red: 0.30, green: 0.30, blue: 0.30))
                             
                             VStack(spacing: 12) {
-                                ProgressRow(title: "Termo", isCompleted: blockManager.dailyProgress.completedGames.contains(.termo))
+                                ProgressRow(title: "Palavrada", isCompleted: blockManager.dailyProgress.completedGames.contains(.palavrada))
                                 
                                 if blockManager.currentDifficulty == .medium || blockManager.currentDifficulty == .hard {
                                     ProgressRow(title: "Dueto", isCompleted: blockManager.dailyProgress.completedGames.contains(.dueto))
@@ -237,11 +270,11 @@ struct DifficultyButton: View {
     var detailedDescription: String {
         switch difficulty {
         case .easy:
-            return "Apenas 1 Termo por dia"
+            return "Apenas 1 Palavrada por dia"
         case .medium:
-            return "Termo + Dueto (3 palavras total)"
+            return "Palavrada + Dueto (3 palavras total)"
         case .hard:
-            return "Termo + Dueto + Quarteto (7 palavras!)"
+            return "Palavrada + Dueto + Quarteto (7 palavras!)"
         }
     }
     
@@ -338,7 +371,7 @@ struct DifficultyButton: View {
     
     private func gameIcon(for gameType: GameType) -> String {
         switch gameType {
-        case .termo:
+        case .palavrada:
             return "a.square.fill"
         case .dueto:
             return "square.split.2x1.fill"
@@ -349,8 +382,8 @@ struct DifficultyButton: View {
     
     private func gameName(for gameType: GameType) -> String {
         switch gameType {
-        case .termo:
-            return "Termo"
+        case .palavrada:
+            return "Palavrada"
         case .dueto:
             return "Dueto"
         case .quarteto:

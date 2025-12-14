@@ -9,12 +9,33 @@ class AppBlockingManager: ObservableObject {
     
     private let store = ManagedSettingsStore(named: ManagedSettingsStore.Name("TermoDeBloqueio"))
     private let center = AuthorizationCenter.shared
+    private let userDefaults = UserDefaults.standard
+    private let selectionKey = "appSelectionData"
     
     @Published var isAuthorized = false
-    @Published var selection = FamilyActivitySelection()
+    @Published var selection = FamilyActivitySelection() {
+        didSet {
+            saveSelection()
+        }
+    }
     
     private init() {
+        loadSelection()
         checkAuthorization()
+    }
+    
+    private func saveSelection() {
+        let data = ["tokenCount": selection.applicationTokens.count]
+        if let encoded = try? JSONEncoder().encode(data) {
+            userDefaults.set(encoded, forKey: selectionKey)
+        }
+    }
+    
+    private func loadSelection() {
+        if let data = userDefaults.data(forKey: selectionKey),
+           let decoded = try? JSONDecoder().decode([String: Int].self, from: data) {
+            print("📱 Seleção anterior encontrada: \(decoded["tokenCount"] ?? 0) apps")
+        }
     }
     
     func requestAuthorization() async {

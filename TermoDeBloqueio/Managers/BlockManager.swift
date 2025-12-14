@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import FamilyControls
 
 class BlockManager: ObservableObject {
     static let shared = BlockManager()
@@ -65,12 +66,19 @@ class BlockManager: ObservableObject {
     }
     
     func setDifficulty(_ difficulty: Difficulty) {
+        if !dailyProgress.completedGames.isEmpty {
+            print("⚠️ Não é possível mudar dificuldade após começar a jogar")
+            return
+        }
+        
         currentDifficulty = difficulty
         userDefaults.set(difficulty.rawValue, forKey: difficultyKey)
         
         dailyProgress.difficulty = difficulty
         saveProgress()
         updateBlockState()
+        
+        print("🎯 Dificuldade alterada para: \(difficulty.displayName)")
     }
     
     func markGameCompleted(_ gameType: GameType) {
@@ -102,15 +110,19 @@ class BlockManager: ObservableObject {
         let debugBlock = userDefaults.bool(forKey: debugBlockKey)
         let shouldBlock = debugBlock ? true : !dailyProgress.isUnlocked
         
+        let hasAppsSelected = !appBlockingManager.selection.applicationTokens.isEmpty
+        
         if isBlocked != shouldBlock {
             isBlocked = shouldBlock
-            print("Estado mudou para: \(isBlocked ? "BLOQUEADO" : "DESBLOQUEADO")")
+            print("🔄 Estado mudou para: \(isBlocked ? "BLOQUEADO" : "DESBLOQUEADO")")
         }
         
-        if isBlocked {
+        if isBlocked && hasAppsSelected {
             appBlockingManager.blockApps()
-        } else {
+        } else if !isBlocked {
             appBlockingManager.unblockApps()
+        } else if isBlocked && !hasAppsSelected {
+            print("⚠️ Nenhum app selecionado para bloquear. Vá em Configurações > Selecionar Apps")
         }
     }
     
@@ -129,6 +141,10 @@ class BlockManager: ObservableObject {
     
     var isDebugBlocked: Bool {
         userDefaults.bool(forKey: debugBlockKey)
+    }
+    
+    var canChangeDifficulty: Bool {
+        dailyProgress.completedGames.isEmpty
     }
     
     private static func getTodayString() -> String {

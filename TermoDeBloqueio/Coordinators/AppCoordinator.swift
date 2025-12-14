@@ -18,9 +18,9 @@ class AppCoordinator: ObservableObject {
             .sink { [weak self] isBlocked in
                 guard let self = self else { return }
                 if isBlocked && self.currentView == .menu {
-                    self.currentView = .lockScreen
-                } else if !isBlocked && self.currentView == .lockScreen {
-                    self.currentView = .menu
+                    DispatchQueue.main.async {
+                        self.currentView = .lockScreen
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -33,7 +33,7 @@ class AppCoordinator: ObservableObject {
     
     enum AppView {
         case menu
-        case termo
+        case palavrada
         case dueto
         case quarteto
         case settings
@@ -45,8 +45,8 @@ class AppCoordinator: ObservableObject {
         currentView = .menu
     }
     
-    func showTermo() {
-        currentView = .termo
+    func showPalavrada() {
+        currentView = .palavrada
     }
     
     func showDueto() {

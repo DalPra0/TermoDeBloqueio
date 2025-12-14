@@ -129,7 +129,7 @@ struct AppSelectionView: View {
                                 
                                 VStack(alignment: .leading, spacing: 8) {
                                     InfoRow(number: "1", text: "Selecione os apps que deseja bloquear")
-                                    InfoRow(number: "2", text: "Os apps serão bloqueados até você resolver o Termo")
+                                    InfoRow(number: "2", text: "Os apps serão bloqueados até você resolver a Palavrada")
                                     InfoRow(number: "3", text: "Complete os desafios para desbloquear")
                                 }
                             }
@@ -151,14 +151,17 @@ struct AppSelectionView: View {
             selection: $appBlockingManager.selection
         )
         .onChange(of: appBlockingManager.selection) {
-            print("SELEÇÃO ALTERADA")
+            print("📱 SELEÇÃO ALTERADA")
             print("   Apps selecionados: \(appBlockingManager.selection.applicationTokens.count)")
-            print("   Tokens: \(appBlockingManager.selection.applicationTokens)")
             
             if !appBlockingManager.selection.applicationTokens.isEmpty {
-                print("Aplicando bloqueio automaticamente")
+                print("🔄 Aplicando bloqueio automaticamente...")
+                
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+                
                 Task {
-                    try? await Task.sleep(nanoseconds: 500_000_000)
+                    try? await Task.sleep(nanoseconds: 300_000_000)
                     await MainActor.run {
                         appBlockingManager.blockApps()
                     }

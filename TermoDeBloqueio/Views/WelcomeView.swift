@@ -39,11 +39,11 @@ struct WelcomeView: View {
                     WelcomePage(
                         icon: "brain.head.profile",
                         iconColor: Color(red: 0.40, green: 0.71, blue: 0.38),
-                        title: "Bem-vindo ao\nTermo de Bloqueio",
+                        title: "Bem-vindo ao\nPalavrada de Bloqueio",
                         subtitle: "Transforme seu vício em apps em um hábito de treinar o cérebro!",
                         features: [
                             ("checkmark.circle.fill", "Bloqueie apps distrativos"),
-                            ("gamecontroller.fill", "Jogue Termo para desbloquear"),
+                            ("gamecontroller.fill", "Jogue Palavrada para desbloquear"),
                             ("calendar", "Desafios diários")
                         ],
                         showDots: true,
@@ -56,7 +56,7 @@ struct WelcomeView: View {
                         icon: "lock.shield.fill",
                         iconColor: Color(red: 0.90, green: 0.30, blue: 0.30),
                         title: "Como Funciona\no Bloqueio",
-                        subtitle: "Escolha apps que você quer usar menos (Instagram, TikTok, etc). Eles ficarão bloqueados até você resolver os Termos do dia.",
+                        subtitle: "Escolha apps que você quer usar menos (Instagram, TikTok, etc). Eles ficarão bloqueados até você resolver as Palavradas do dia.",
                         features: [
                             ("iphone.and.arrow.forward", "Selecione os apps"),
                             ("moon.zzz.fill", "Bloqueio automático à meia-noite"),
@@ -74,7 +74,7 @@ struct WelcomeView: View {
                         title: "3 Modos de Jogo",
                         subtitle: "Quanto mais difícil, mais palavras você precisa descobrir para desbloquear:",
                         features: [
-                            ("square.fill", "Termo: 1 palavra (Fácil)"),
+                            ("square.fill", "Palavrada: 1 palavra (Fácil)"),
                             ("square.split.2x1.fill", "Dueto: 2 palavras (Médio)"),
                             ("square.grid.2x2.fill", "Quarteto: 4 palavras (Difícil)")
                         ],

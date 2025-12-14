@@ -13,11 +13,11 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
                 color: .white
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Complete o Termo para desbloquear",
+                text: "Complete a Palavrada para desbloquear",
                 color: UIColor(white: 0.7, alpha: 1.0)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Resolver Termo",
+                text: "Resolver Palavrada",
                 color: .white
             ),
             primaryButtonBackgroundColor: UIColor(red: 0.40, green: 0.71, blue: 0.38, alpha: 1.0),
@@ -42,11 +42,11 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
                 color: .white
             ),
             subtitle: ShieldConfiguration.Label(
-                text: "Complete o Termo para desbloquear",
+                text: "Complete a Palavrada para desbloquear",
                 color: UIColor(white: 0.7, alpha: 1.0)
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "Resolver Termo",
+                text: "Resolver Palavrada",
                 color: .white
             ),
             primaryButtonBackgroundColor: UIColor(red: 0.40, green: 0.71, blue: 0.38, alpha: 1.0)
